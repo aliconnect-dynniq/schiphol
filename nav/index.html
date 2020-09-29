@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Schiphol NAV</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<!--<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">-->
+	<link rel="stylesheet" href="css/nav.css" />
+	<script src="/api/js?libraries=web,three"></script>
+	<script src="js/nav.js"></script>
+</head>
+<body style="overflow:hidden;">
+	<div id="divpos" style="z-index:10;position:fixed;top:5px;left:5px;background:white;">POSITIE</div>
+	<div style="z-index:10;position:fixed;top:30px;left:5px;background:white;">
+		<button onclick="start();">START</button>
+		<button onclick="orbit();">ORBIT</button>
+		<button onclick="push();">ADD</button>
+	</div>
+	<textarea id="eplist" style="z-index:10;position:fixed;top:100px;left:5px;background:white;">POSITIE</textarea>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿html, body {
+	font-family: Calibri;
+	height: 100%;
+	color: white;
+	background: black;
+	margin: 0;
+	padding: 0;
+}
+
+table {
+	border-collapse: collapse;
+	font-size: 10pt;
+	color:#ccc;
+}
+thead {
+	background-color:rgba(180,180,180,0.2)
+}
+.value {
+	color:white;
+}
+.value:not(:empty)::before {
+	content:" = ";
+}
+
+

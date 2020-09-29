@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Schiphol NAV</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<!--<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">-->
+	<script src="/inc/js/three/build/three.js"></script>
+	<script src="/inc/js/three/examples/js/libs/stats.min.js"></script>
+	<script src="/inc/js/three/examples/js/controls/OrbitControls.js"></script>
+	<script src="/inc/js/three/examples/js/renderers/Projector.js"></script>
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+		}
+
+		canvas {
+			width: 50%;
+			height: 50%;
+		}
+	</style>
+</head>
+<body style="overflow:hidden;">
+	<!--<div id="pos" style="z-index:10;position:fixed;top:5px;left:5px;background:white;">POSITIE</div>-->
+	<button style="z-index:10;position:fixed;top:30px;left:5px;background:white;" onclick="push();">ADD</button>
+	<textarea id="eplist" style="z-index:10;position:fixed;top:100px;left:5px;background:white;">POSITIE</textarea>
+
+	<script>
+		var loader = new THREE.TextureLoader();
+		var scene = new THREE.Scene();
+		scene.background = new THREE.Color(0x3E7FD3);
+		//new THREE.TextureLoader();
+		//loader.load('landscape.jpg', function (texture) {scene.background = texture;});
+
+		var floorMaterial = new THREE.MeshBasicMaterial({ map: loader.load('schiphol.jpg'), side: THREE.DoubleSide });
+		var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 0, 0);
+		var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+		floor.rotation.x = -Math.PI / 2;
+		scene.add(floor);
+
+
+		//group = new THREE.Group();
+		//scene.add(group);
+
+
+		var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		//renderer.setClearColor(0xffffff, 0);
+		document.body.appendChild(renderer.domElement);
+
+		//var geometry = new THREE.BoxGeometry(1, 1, 1);
+		//var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+		//var cube = new THREE.Mesh(geometry, material);
+		//scene.add(cube);
+
+		//camera.position.z = 10;
+		//camera.up.set(0, 0, 1);
+
+		//controls = new THREE.OrbitControls(camera, renderer.domElement);
+		//controls.addEventListener('change', animate);
+
+		var plist = [];
+		function push() {
+			console.log('push');
+			plist.push({ pos: { x: camera.position.x, y: camera.position.y, z: camera.position.z }, rot: { x: camera.rotation._x, y: camera.rotation._y, z: camera.rotation._z } });
+			eplist.value = JSON.stringify(plist);
+		}
+
+		var poslist = [
+			{ "pos": { "x": -98.75955139469264, "y": 3, "z": -73.93999164243071 }, "rot": { "_x": -2.7731764293947263, "_y": 0.058519330742992294, "_z": 3.119018446846416, "_order": "XYZ" } },
+			{ "pos": { "x": -83.14828711215907, "y": 3, "z": 58.6335194604837 }, "rot": { "_x": -2.8919296393722655, "_y": -0.20340996549656098, "_z": 3.0901289795366793, "_order": "XYZ" } },
+			{ "pos": { "x": -93.42476318176892, "y": 3, "z": 110.0094947790754 }, "rot": { "_x": -2.9955850696407422, "_y": 0.5147196460911505, "_z": 3.0693253626312558, "_order": "XYZ" } },
+			{ "pos": { "x": -108.32073596038956, "y": 3, "z": 118.10137236628358 }, "rot": { "_x": -1.082370374949245, "_y": 1.2449077910993576, "_z": 1.0596311362976367, "_order": "XYZ" } },
+			{ "pos": { "x": -143.111071267695, "y": 3, "z": 105.05793441415744 }, "rot": { "_x": -0.3741280242310123, "_y": 0.637701097228508, "_z": 0.22962343902310364, "_order": "XYZ" } },
+			{ "pos": { "x": -153.65195496364203, "y": 3, "z": 99.16298264974726 }, "rot": { "_x": -0.4276025854867617, "_y": -0.4742485603606276, "_z": -0.20518597632436028, "_order": "XYZ" } },
+		];
+		var poslist =
+[{ "pos": { "x": 451.4281126683471, "y": 3, "z": -352.49469947074704 }, "rot": { "x": 0, "y": -4.799893033724302, "z": 0 } }, { "pos": { "x": 230.75912314770233, "y": 3, "z": -352.785608540722 }, "rot": { "x": 0, "y": -4.699893033724303, "z": 0 } }, { "pos": { "x": 215.3528229744497, "y": 3, "z": -349.461650356177 }, "rot": { "x": 0, "y": -4.299893033724304, "z": 0 } }, { "pos": { "x": 192.24721916246148, "y": 3, "z": -337.6070139057244 }, "rot": { "x": 0, "y": -4.199893033724305, "z": 0 } }, { "pos": { "x": 184.9548490814759, "y": 3, "z": -334.4158590845246 }, "rot": { "x": 0, "y": -4.4998930337243035, "z": 0 } }, { "pos": { "x": 169.18535655794176, "y": 3, "z": -331.8305856549262 }, "rot": { "x": 0, "y": -4.699893033724303, "z": 0 } }, { "pos": { "x": 163.03352792863643, "y": 3, "z": -330.3625922912971 }, "rot": { "x": 0, "y": -4.799893033724302, "z": 0 } }, { "pos": { "x": 89.04680128292077, "y": 3, "z": -329.63769240011476 }, "rot": { "x": 0, "y": -4.699893033724303, "z": 0 } }, { "pos": { "x": 79.24099294610176, "y": 3, "z": -328.3329800411635 }, "rot": { "x": 0, "y": -4.199893033724305, "z": 0 } }, { "pos": { "x": 74.30288790622524, "y": 3, "z": -327.7469408601119 }, "rot": { "x": 0, "y": -3.8998930337243047, "z": 0 } }, { "pos": { "x": 36.22111406194613, "y": 3, "z": -278.83293979150346 }, "rot": { "x": 0, "y": -3.7998930337243046, "z": 0 } }, { "pos": { "x": 33.0726548268598, "y": 3, "z": -273.7958187614895 }, "rot": { "x": 0, "y": -3.3998930337243043, "z": 0 } }, { "pos": { "x": 30.47450342173051, "y": 3, "z": -260.0535502988859 }, "rot": { "x": 0, "y": -3.299893033724304, "z": 0 } }, { "pos": { "x": 33.72852510004699, "y": 3, "z": -256.3177000710789 }, "rot": { "x": 0, "y": -3.6998930337243046, "z": 0 } }, { "pos": { "x": 20.1552658356432, "y": 3, "z": -238.75091492740572 }, "rot": { "x": 0, "y": -3.7998930337243046, "z": 0 } }, { "pos": { "x": 12.290567251350975, "y": 3, "z": -226.68320390514873 }, "rot": { "x": 0, "y": -3.999893033724305, "z": 0 } }, { "pos": { "x": -48.7182520670988, "y": 3, "z": -169.23846228604302 }, "rot": { "x": 0, "y": -3.8998930337243047, "z": 0 } }, { "pos": { "x": -52.35385512270766, "y": 3, "z": -164.54082732278147 }, "rot": { "x": 0, "y": -3.5998930337243045, "z": 0 } }, { "pos": { "x": -54.754113458960134, "y": 3, "z": -157.00361778799538 }, "rot": { "x": 0, "y": -3.299893033724304, "z": 0 } }, { "pos": { "x": -55.3846737237909, "y": 3, "z": -153.05363123707946 }, "rot": { "x": 0, "y": -3.199893033724304, "z": 0 } }, { "pos": { "x": -54.03693552486738, "y": 3, "z": -110.69364112027083 }, "rot": { "x": 0, "y": -3.199893033724304, "z": 0 } }, { "pos": { "x": -54.38653968018508, "y": 3, "z": -104.70383503538088 }, "rot": { "x": 0, "y": -3.4998930337243044, "z": 0 } }, { "pos": { "x": -56.49063801857805, "y": 3, "z": -99.08486981192807 }, "rot": { "x": 0, "y": -4.099893033724305, "z": 0 } }, { "pos": { "x": -60.78506242111754, "y": 3, "z": -93.73226259574405 }, "rot": { "x": 0, "y": -4.699893033724303, "z": 0 } }, { "pos": { "x": -120.78037802158515, "y": 3, "z": -92.98252530822477 }, "rot": { "x": 0, "y": -4.699893033724303, "z": 0 } }, { "pos": { "x": -130.35913625342252, "y": 3, "z": -90.31376101775318 }, "rot": { "x": 0, "y": -3.099893033724304, "z": 0 } }, { "pos": { "x": -118.92193855212932, "y": 3, "z": 11.137609122882623 }, "rot": { "x": 0, "y": -3.099893033724304, "z": 0 } }, { "pos": { "x": -119.6935640794148, "y": 3, "z": 20.9996953891688 }, "rot": { "x": 0, "y": -4.099893033724305, "z": 0 } }, { "pos": { "x": -124.60285779705387, "y": 3, "z": 24.44916421696672 }, "rot": { "x": 0, "y": -4.4998930337243035, "z": 0 } }, { "pos": { "x": -138.35264944300815, "y": 3, "z": 27.007203097650176 }, "rot": { "x": 0, "y": -4.599893033724303, "z": 0 } }, { "pos": { "x": -140.3400074458293, "y": 3, "z": 27.23172073308836 }, "rot": { "x": 0, "y": -4.099893033724305, "z": 0 } }, { "pos": { "x": -143.6128699242553, "y": 3, "z": 29.531366618286974 }, "rot": { "x": 0, "y": -3.4998930337243044, "z": 0 } }, { "pos": { "x": -147.01220417814724, "y": 3, "z": 33.160808715482936 }, "rot": { "x": 0, "y": -3.099893033724304, "z": 0 } }, { "pos": { "x": -147.01220417814724, "y": 3, "z": 33.160808715482936 }, "rot": { "x": 0, "y": -3.099893033724304, "z": 0 } }]
+		;
+
+		var iPos = 0, set = poslist[iPos], dt = new Date();
+
+		for (var i = 0, pos; pos = poslist[i]; i++) {
+			var geometry = new THREE.BoxGeometry(.5, .5, .5);
+			var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+			var cube = new THREE.Mesh(geometry, material);
+			cube.position.set(pos.pos.x, 0, pos.pos.z);
+			scene.add(cube);
+		}
+
+		//var geometry = new THREE.PlaneGeometry(5, 20, 32);
+		//var material = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
+		//var plane = new THREE.Mesh(geometry, material);
+		//scene.add(plane);
+
+		//camera.position.set(set.pos.x, set.pos.y, set.pos.z);
+		//camera.rotation.set(set.rot._x, set.rot._y, set.rot._z);
+
+		camera.position.y = 3;
+		//camera.rotation.x = -1.5;
+		//camera.rotation.y = 1.5;
+
+		function animate() {
+			requestAnimationFrame(animate);
+			//console.log(1);
+
+			var diff = new Date().valueOf() - dt.valueOf(), next = false, d = {};
+			var pos1 = poslist[iPos], pos2 = poslist[iPos + 1], speed = 0.02;
+			var diffo = { x: pos1.pos.x - pos2.pos.x, z: pos1.pos.z - pos2.pos.z };
+			var afstand = Math.sqrt((diffo.x * diffo.x) + (diffo.z * diffo.z));
+			if (pos2 && afstand) {
+				//pos1.pos.y = pos2.pos.y = 3;
+				var speedafstand = speed * diff, speedpart = speedafstand / afstand;
+				//var step=
+				//console.log(pos1.pos.x, pos2.pos.x, diff, diffo, afstand, speedafstand, speedpart);
+				if (speedpart > 1) { iPos++; dt = new Date(); }
+				pos1.rot._x = pos2.rot._x = 0;
+				pos1.rot._z = pos2.rot._z = 0;
+				//pos1.rot._y = pos2.rot._y = 0;
+				['x', 'y', 'z'].forEach(function (posname) {
+					var p1 = pos1.pos[posname], p2 = pos2.pos[posname], dp = p2 - p1, step = dp * speedpart, pnew = p1 + step;
+					camera.position[posname] = pnew;
+					var p1 = pos1.rot[posname], p2 = pos2.rot[posname], dp = p2 - p1, step = dp * speedpart, pnew = p1 + step;
+					camera.rotation[posname] = pnew;
+				});
+			}
+			//pos.innerText = JSON.stringify({ pos: camera.position, rot: camera.rotation });
+			renderer.render(scene, camera);
+		}
+		//setTimeout(animate, 5000);
+		animate();
+		r = 0;
+		window.addEventListener('keydown', function (event) {
+			console.log(event.code);
+			var step = 2;
+			if (event.shiftKey) {
+				switch (event.code) {
+					case 'ArrowLeft':
+						camera.rotation.y += 0.1;
+						break;
+					case 'ArrowRight':
+						camera.rotation.y -= 0.1;
+						break;
+				}
+				r = (camera.rotation._y / Math.PI) % 2;
+				console.log({ r: r, x: Math.sin(camera.rotation._y), z: Math.cos(camera.rotation._y) });
+			}
+			else switch (event.code) {
+				case 'ArrowLeft':
+					camera.position.x -= step * Math.cos(camera.rotation._y);
+					camera.position.z += step * Math.sin(camera.rotation._y);
+					break;
+				case 'ArrowRight':
+					camera.position.x += step * Math.cos(camera.rotation._y);
+					camera.position.z -= step * Math.sin(camera.rotation._y);
+					break;
+				case 'ArrowUp':
+					camera.position.z -= step * Math.cos(camera.rotation._y);
+					camera.position.x -= step * Math.sin(camera.rotation._y);
+					break;
+				case 'ArrowDown':
+					camera.position.z += step * Math.cos(camera.rotation._y);
+					camera.position.x += step * Math.sin(camera.rotation._y);
+					break;
+			}
+			//console.log(camera.rotation._y, camera.rotation._y / Math.PI, r);
+		});
+	</script>
+</body>
+</html>
