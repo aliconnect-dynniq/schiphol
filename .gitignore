@@ -1,6 +1,7 @@
 **secret**
 .remote*
 .vs
+**node_modules**
 
 _**
 **Copy**
@@ -17,7 +18,6 @@ _**
 **desktop**
 cert/**
 /js/min
-**node_modules**
 /api/sql
 /app
 /inc
@@ -31,3 +31,7 @@ cert/**
 /tmp
 /google**
 /**htaccess**
+
+
+
+/nav

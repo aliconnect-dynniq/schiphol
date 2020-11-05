@@ -58,13 +58,14 @@ components:
     Schakelbericht:
       className: task
       header:
-      - [Uitvoerder_CompanyName,WorkTitle]
+      - [ContractorCompanyName,WorkTitle]
       - []
       - [WorkDescription]
       properties:
         State:
           format: radio
           format: select
+          filter: 1
           options:
             request:
               title: Aanvraag
@@ -90,6 +91,14 @@ components:
             finished:
               title: Afgerond
               color: white
+        Station2:
+          options:
+            1:
+              title: Station J2
+            2:
+              title: Station C
+            3:
+              title: Station H
         Master:
           format: hidden
         Fav:
@@ -98,11 +107,6 @@ components:
         UserID:
           type: integer
           format: hidden
-        Messages:
-          format: hidden
-          schema: Message
-          type: array
-
         Files:
           label: Algemeen
           # type: files
@@ -115,27 +119,42 @@ components:
           disabled: true # Geen tabstop
           title: Schakelberichtnummer
         CreatedDateTime:
-          type: date
+          type: datetime
           placeholder: Created
           disabled: true # Geen tabstop
         LastModifiedDateTime:
-          format: date
+          type: datetime
           placeholder: Modfied
           disabled: true # Geen tabstop
         StartDateTime:
-          format: date
+          type: datetime
           placeholder: Start
           public: true
         EndDateTime:
-          format: date
+          type: datetime
           placeholder: Deadline
           public: true
         FinishDateTime:
-          format: date
+          type: datetime
           placeholder: Gereed
           public: true
 
+        Station1:
+          schema: dms_Location
+          filter: MasterId eq 3490364
+          # options:
+          #   1:
+          #     title: Station J2
+          #   2:
+          #     title: Station C
+          #   3:
+          #     title: Station H
+          # schema: System
+          # filter: Typical eq Station
+
+
         ContractorCompanyName:
+          filter: 1
           label: Contractor
           format: text
           schema: Company
@@ -160,22 +179,51 @@ components:
         WotkLocations:
           format: address
         Station:
-          options:
-            1:
-              title: Station J2
-            2:
-              title: Station C
-            3:
-              title: Station H
+          schema: dms_Location
+          filter: MasterId eq 3490364
+          # options:
+          #   1:
+          #     title: Station J2
+          #   2:
+          #     title: Station C
+          #   3:
+          #     title: Station H
           # schema: System
           # filter: Typical eq Station
         Uitschakelingen:
           # schema: System
           # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
+          format: 'radio'
+          options:
+            1:
+              title: Hoofdgroep
+            2:
+              title: SubgroepA
+            3:
+              title: SubgroepB
+            4:
+              title: SubgroepC
           type: array
-          manimum: 1
-          maximum: 5
+          defaultvalue: 2,3
+          # manimum: 1
+          # maximum: 5
 
+        UitschakelingenTwee:
+          # schema: System
+          # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
+          type: array
+          defaultvalue: '2,3'
+          options:
+            1:
+              title: Hoofdgroep
+            2:
+              title: SubgroepA
+            3:
+              title: SubgroepB
+            4:
+              title: SubgroepC
+          # manimum: 1
+          # maximum: 5
 
         Accepted:
           label: Acceptance
@@ -213,7 +261,10 @@ components:
         WorkFinish:
           type: image
           format: signature
-
+        Messages:
+          format: hidden
+          schema: Message
+          type: array
         # UitvoerderImageLock:
         #   format: cam
     Company:
@@ -725,6 +776,8 @@ components:
           title: Products
           type: array
           schema: System
+        Children:
+          type: array
     Website:
       security: *basic_security
       btns:
@@ -797,6 +850,9 @@ components:
       - [BodyHTML]
       treeTitleAttributeName: Title
       properties:
+        File:
+          label: Algemeen
+          format: files
         State:
           label: State
           format: radio
