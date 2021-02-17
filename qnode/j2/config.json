@@ -4,11 +4,25 @@
     "http": {
       "port": 9000
     },
-    "ws": {
-      "url": "wss://aliconnect.nl:444"
-    },
     "aim": {
-      "url": "https://schiphol.aliconnect.nl/j2/dms/webroot/api"
+      "websocket": {
+        "servers": [
+          {"url": "wss://aliconnect.nl:444"}
+        ]
+      },
+      "servers": [
+        {"url": "https://schiphol.aliconnect.nl/qnode/j2/webroot/api"}
+      ]
     }
+  },
+  "settings": {
+    "intervalSystemAttributes": 60000,
+  	"timeWaitAfterTimeout": 60000,
+  	"acmsHartbeatTimeout": 60000,
+  	"acmsHartbeatID": 3563537,
+  	"acmsHartbeatMaxCount": 100,
+  	"freeMemID": 3563535,
+  	"freeDiskSpaceID": 3563536,
+  	"timeSyncID": 3563538
   }
 }

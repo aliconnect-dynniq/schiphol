@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aim-server": "^1.0.1"
+    "@aliconnect/sdk": "0.0.0",
+    "mssql": "^6.2.3"
   }
 }
