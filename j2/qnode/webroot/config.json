@@ -1,0 +1,44 @@
+{
+    "dbs": {
+        "server": "localhost",
+        "port": 1433,
+        "database": "aim",
+        "user": "aim",
+        "password1": "qwertyuiop",
+        "password": "A!mUser"
+    },
+    "client": {
+        "device": {
+            "id": "3681968",
+            "uid": "9ab430fb-8d3a-47d8-b4b9-f4d09e0df758"
+        },
+        "system": {
+            "id": "3682790",
+            "uid": "3525a378-7a10-4418-9dda-08ebe2557e8f"
+        }
+    },
+    "ws": {
+        "protocol": "http",
+        "hostname": "localhost",
+        "hostname1": "192.168.2.202",
+        "port": 80
+    },
+    "wss": {
+        "protocol": "ws",
+        "hostname": "localhost",
+        "port": 81
+    },
+    "connector": {
+        "url1": "/tms/aim/v1/api/?select=*&child=4&filter=finishDT+IS+NULL&folder=",
+        "urlPut": "/sites/dms/app/system/dms/api",
+        "src": "/aim/v1/api/"
+    },
+    "intervalSystemAttributes": 60000,
+    "timeWaitAfterTimeout": 60000,
+    "acmsHartbeatTimeout": 60000,
+    "_acmsHartbeatID": 3563537,
+    "acmsHartbeatMaxCount": 100,
+    "_freeMemID": 3563535,
+    "_freeDiskSpaceID": 3563536,
+    "_timeSyncID": 3563538
+}
