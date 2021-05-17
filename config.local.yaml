@@ -24,6 +24,7 @@ client:
     # tokenUrl: https://login.aliconnect.nl/api/oauth2/token
 ref:
   wiki: https://github.com/aliconnect/api/wiki
+  wiki: https://aliconnect.nl/sites/schiphol/wiki
   home: https://aliconnect.nl/sites/schiphol
   twitterName: AliconnectNL
 css:
