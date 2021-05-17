@@ -17,12 +17,14 @@ scope:
 ws:
   url: wss://aliconnect.nl:444
 client:
+  client_id: C52ABA40-11FE-4400-90B9-CEE5BDA2C5AA
   servers:
     - url: https://schiphol.aliconnect.nl/api
     # authorizationUrl: https://login.aliconnect.nl/api/oauth2
     # tokenUrl: https://login.aliconnect.nl/api/oauth2/token
 css:
-  .row.top.bar: background-color:#1B60DB; color:white;
+  basebg: '#1B60DB'
+  basefg: white
 menu:
   Organisatie:
     className: crm
@@ -37,276 +39,108 @@ menu:
     Schakelberichten:
       className: task
       href: Schakelbericht
-definitions:
-  security: &basic_security
-    write:
-      - default_auth: ['write:web','write:all','admin:write','write:admin']
-    read:
-      - default_auth: ['write:web','read:web','write:all','admin:write','write:admin']
+  System Engineering:
+    Equipment:
+      href: Equipment?$top=100
 components:
   schemas:
-    Schema:
+    Item:
+      security:
+        read:
+        - aim_auth:
+          - website.read
+          - admin.read
+        write:
+        - aim_auth:
+          - website.readwrite
+          - admin.readwrite
+      header:
+      - - Prefix
+        - Tag
+        - Title
+      - - Description
+      - - BodyHTML
       properties:
-        File:
-          legend: Algemeen
-          format: files
-        Title:
-          legend: Content
-          title: Title
-          type: string
-          format: text
+        State:
+          legend: Item
+          title: State
+          format: radio
+          filter: 1
+          options:
+            run:
+              title: Stopping
+              color: green
+            stopped:
+              title: Clearing
+              color: red
+        CreatedDateTime:
+          type: datetime
+          format: hidden
+        LastModifiedDateTime:
+          type: datetime
+          format: hidden
+        LastVisitDateTime:
+          type: datetime
+          format: hidden
+        StartDateTime:
+          type: datetime
+          format: hidden
+        EndDateTime:
+          type: datetime
+          format: hidden
+        FinishDateTime:
+          type: datetime
+          format: hidden
+        Master:
+          filter: true
+          title: Onderdeel van
+          schema: '*'
+        Src:
+          filter: true
+          title: Kopie van
+          schema: '*'
+        Class:
+          filter: true
+          title: Class
+          schema: '*'
         Children:
           format: hidden
           type: array
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: Website
-        Source:
-          title: Kopie van
-          legend: Configuratie
-          schema: Webpage
-        Inherit:
-          title: Afgeleid van
-          legend: Configuratie
-          schema: Webpage
-    Message:
-      properties:
-        CreatedByTitle:
-          type: string
-        CreatedByID:
-          type: int
-        CreatedDateTime:
-          type: datetime
-          placeholder: Created
-          disabled: true # Geen tabstop
-        BodyHTML:
-          format: rich
-        Content: []
-    Schakelbericht:
-      className: task
-      header:
-      - [ContractorCompanyName,WorkTitle]
-      - []
-      - [WorkDescription]
-      properties:
-        State:
-          format: radio
-          format: select
-          filter: 1
-          options:
-            request:
-              title: Aanvraag
-              color: orange
-            reject:
-              title: Afgewezen
-              color: black
-            inBehandeling:
-              title: In behandeling
-              color: yellow
-            scheduled:
-              title: In de planning
-              color: lightblue
-            run:
-              title: Actief
-              color: green
-            seitchedOff:
-              title: Uitgeschakeld
-              color: red
-            hold:
-              title: In de wacht
-              color: blue
-            finished:
-              title: Afgerond
-              color: white
-        Station2:
-          options:
-            1:
-              title: Station J2
-            2:
-              title: Station C
-            3:
-              title: Station H
-        Master:
+        Message:
           format: hidden
-        Fav:
-          type: boolean
-          format: hidden
-        UserID:
-          type: integer
-          format: hidden
-        Files:
-          legend: Algemeen
-          # type: files
+          type: array
+        File:
           format: files
-        View:
-          format: sharecam
-        ID:
-          type: integer
-          readonly: true # Tabstop actief
-          disabled: true # Geen tabstop
-          title: Schakelberichtnummer
-        CreatedDateTime:
-          type: datetime
-          placeholder: Created
-          disabled: true # Geen tabstop
-        LastModifiedDateTime:
-          type: datetime
-          placeholder: Modfied
-          disabled: true # Geen tabstop
-        StartDateTime:
-          type: datetime
-          placeholder: Start
-          public: true
-        EndDateTime:
-          type: datetime
-          placeholder: Deadline
-          public: true
-        FinishDateTime:
-          type: datetime
-          placeholder: Gereed
-          public: true
-
-        Station1:
-          schema: dms_Location
-          filter: MasterId eq 3490364
-          # options:
-          #   1:
-          #     title: Station J2
-          #   2:
-          #     title: Station C
-          #   3:
-          #     title: Station H
-          # schema: System
-          # filter: Typical eq Station
-
-
-        ContractorCompanyName:
-          filter: 1
-          legend: Contractor
-          format: text
-          schema: Company
-        ContractorContact:
-          format: text
-          schema: Contact
-        ContractorEmail:
-          type: string
-          format: email
-          mailto: true
-          # required: true
-          # pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$',
-        ContractorBusinessAddres:
-          format: address
-        ContractorOtherAddres:
-          format: address
-        WorkTitle:
-          legend: Work
-          format: text
-        WorkDescription:
-          format: html
-        WotkLocations:
-          format: address
-        Station:
-          schema: dms_Location
-          filter: MasterId eq 3490364
-          # options:
-          #   1:
-          #     title: Station J2
-          #   2:
-          #     title: Station C
-          #   3:
-          #     title: Station H
-          # schema: System
-          # filter: Typical eq Station
-        Uitschakelingen:
-          # schema: System
-          # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
-          format: 'radio'
-          options:
-            1:
-              title: Hoofdgroep
-            2:
-              title: SubgroepA
-            3:
-              title: SubgroepB
-            4:
-              title: SubgroepC
-          type: array
-          defaultvalue: 2,3
-          # manimum: 1
-          # maximum: 5
-
-        UitschakelingenTwee:
-          # schema: System
-          # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
-          type: array
-          defaultvalue: '2,3'
-          options:
-            1:
-              title: Hoofdgroep
-            2:
-              title: SubgroepA
-            3:
-              title: SubgroepB
-            4:
-              title: SubgroepC
-          # manimum: 1
-          # maximum: 5
-
-        Accepted:
-          legend: Acceptance
-          format: checkbox
-        AcceptedComment:
-          format: html
-
-        VrijgaveVeiligstellen:
-          legend: Release
-          format: checkbox
-        ArrivalDateTime:
-          format: datetime
-
-        WorkStarted:
-          legend: WorkStart
-          format: checkbox
-        WorkStartSignature:
-          type: image
-          format: signature
-
-        SwitchOff:
-          legend: SwitchOff
-          format: checkbox
-
-        WorkFinished:
-          legend: WorkActive
-          format: checkbox
-        WorkFinish:
-          type: image
-          format: signature
-
-        SwitchOn:
-          legend: SwitchOn
-          format: checkbox
-        WorkFinish:
-          type: image
-          format: signature
-        Messages:
+        Prefix:
+          filter: true
+        Tag:
+          type: text
+        Title:
+          type: text
+        Name:
+          type: text
+        Tagname:
           format: hidden
-          schema: Message
           type: array
-        # UitvoerderImageLock:
-        #   format: cam
-    Company:
-      security: *basic_security
+        ID:
+          readOnly: true
+    Folder:
+      allOf:
+      - Item
+    Enterprise:
+      allOf:
+      - Item
+      color: rgb(255,167,167)
+      header:
+      - - Prefix
+        - Tag
+        - CompanyName
+        - OfficeLocation
+      - - Description
+      - - BodyHTML
       properties:
-        Keyname:
-          legend: Organisatie
-          title: Keyname
-          idname: keyname
-        Parent:
-          title: Onderdeel van
-          schema: company
-          idname: masterID
         CompanyName:
+          legend: Organisatie
           title: Organisation
           default: Test
         OfficeLocation:
@@ -328,13 +162,6 @@ components:
         Activiteiten:
           title: Company Activity
           type: textarea
-        Employees:
-          title: Employees
-          legend: Employees
-          type: array
-          min: 0
-          max: 100
-          schema: Contact
         CompanyFax:
           title: Company Fax
           type: tel
@@ -358,6 +185,62 @@ components:
         CompanyEmailInvoice:
           title: Company Email Facturen
           type: email
+        BusinessAddress:
+          legend: Address
+          type: object
+          format: address
+          location: geolocatie
+        BusinessAddressStreet:
+          format: hidden
+          filter: 1
+        BusinessAddressNumber:
+          format: hidden
+          type: number
+        BusinessAddressAdd:
+          format: hidden
+          type: string
+        BusinessAddressPostalCode:
+          format: hidden
+          filter: 1
+        BusinessAddressCity:
+          format: hidden
+          filter: 1
+        BusinessAddressTown:
+          format: hidden
+          filter: 1
+        BusinessAddressState:
+          format: hidden
+          filter: 1
+        BusinessAddressCountry:
+          format: hidden
+          filter: 1
+    Site:
+      allOf:
+      - Enterprise
+      color: rgb(255,167,167)
+    Area:
+      allOf:
+      - Item
+      color: rgb(255,167,167)
+    Company:
+      allOf:
+      - Enterprise
+      properties:
+        Keyname:
+          legend: Organisatie
+          title: Keyname
+          idname: keyname
+        Parent:
+          title: Onderdeel van
+          schema: company
+          idname: masterID
+        Employees:
+          title: Employees
+          legend: Employees
+          type: array
+          min: 0
+          max: 100
+          schema: Contact
         BusinessAddress:
           title: Vestigingsadres
           type: address
@@ -613,19 +496,10 @@ components:
           title: Cluster
         Children:
           type: array
+
     Contact:
-      security: *basic_security
-      btns:
-      - msg
-      - fav
-      - printmenu
-      files: []
-
-      title: GivenName,FirstName,MiddleName,Surname,CompanyName
-      subject: CompanyName
-      bodyPreview: Contactpersoon
-
-      listname: Contactpersoon
+      allOf:
+      - Item
       apps:
         mobile: []
       printmenu:
@@ -633,18 +507,15 @@ components:
           title: Organisation Breakdown Structure
           post:
             flds: FirstName,LastName
-      sort(a, b): |
-        return String(a.title).split(' ').pop().localeCompare(String(b.title).split(' ').pop());
-      row(row): |
-        var a = String(row.title).split(' '); a.push('<b>' + a.pop() + '</b>'); row.innerHTML = a.join(' '); //row.findstr = accentsTidy(row.title);
       header:
-      - [GivenName,FirstName,MiddleName,Surname]
-      - [Department]
-      - [OfficeLocation]
-      treeTitleAttributeName: Surname
+      - - GivenName
+        - FirstName
+        - MiddleName
+        - Surname
+      - - Department
+      - - OfficeLocation
       properties:
         State:
-          legend: Account
           type: radio
           filter: 1
           send: 1
@@ -749,7 +620,7 @@ components:
           title: Post adres
           type: address
         EmailAddresses2Address:
-          legend: Privé contactgegevens
+          legend: "Priv\xE9 contactgegevens"
           title: EmailAddresses2Address
           type: email
           state: personal
@@ -811,19 +682,10 @@ components:
         Children:
           type: array
     Website:
-      security: *basic_security
-      btns:
-      - edit
-      childClasses:
-      - 1092
-      dashboard:
-        Relaties:
-          Projecten: []
-          Subsystemen: []
-        Subsystemen: []
+      allOf:
+      - Item
       properties:
         state:
-          legend: Website
           type: radio
           title: Status
           options:
@@ -836,15 +698,6 @@ components:
             published:
               title: Zichtbaar
               color: green
-        StartDateTime:
-          title: Start
-          type: date
-        EndDateTime:
-          title: End
-          type: date
-        FinishDateTime:
-          title: Publish
-          type: date
         Domain:
           title: Domain
           idname: keyname
@@ -869,26 +722,14 @@ components:
           title: Factuur referentie
         InvoiceEmail:
           title: Factuur email
-        Children:
-          type: array
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: Contact
     Webpage:
-      security: *basic_security
-      btns: [slide,msg,fav,send,edit,del,printmenu]
-      childSchema:
-      - Webpage
+      allOf:
+      - Item
       header:
-      - [Title]
-      - [Description]
-      - [BodyHTML]
-      treeTitleAttributeName: Title
+      - - Title
+      - - Description
+      - - BodyHTML
       properties:
-        File:
-          legend: Algemeen
-          format: files
         State:
           legend: State
           format: radio
@@ -903,15 +744,6 @@ components:
             published:
               title: Zichtbaar
               color: green
-        StartDateTime:
-          title: Start
-          format: datetime
-        EndDateTime:
-          title: End
-          format: datetime
-        FinishDateTime:
-          title: Publish
-          format: datetime
         News:
           title: Nieuws
           format: checkbox
@@ -927,13 +759,10 @@ components:
           format: textarea
           title: Inleiding
         BodyHTML:
-          format: html
+          format: div
           title: Hoofdtekst
         Keywords:
           title: Zoekwoorden
-        Children:
-          format: hidden
-          type: array
         Chapter:
           format: hidden
           type: array
@@ -942,66 +771,51 @@ components:
           format: hidden
           type: array
           schema: Webpage
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: Website
-        Source:
-          title: Kopie van
-          legend: Configuratie
-          schema: Webpage
-        Inherit:
-          title: Afgeleid van
-          legend: Configuratie
-          schema: Webpage
-    System: &System
-      security: *basic_security
-      treeTitleAttributeName: Product
+    Location:
+      allOf:
+      - Enterprise
+    Loc:
+      allOf:
+      - Enterprise
+    dms_System:
+      allOf:
+      - Enterprise
+    dms_Location:
+      allOf:
+      - Enterprise
+    dms_Group:
+      allOf:
+      - Enterprise
+    ProcessCell:
+      allOf:
+      - Item
+      color: rgb(254,120,110)
+    Unit:
+      allOf:
+      - Item
+      color: rgb(254,120,110)
+    EquipmentModule:
+      allOf:
+      - Item
+      color: rgb(255,192,0)
       header:
-      - [Brand,Product,Model,Type,Serie,Version,Shape,Material]
-      - []
-      - [Description]
-      properties: &SystemProperties
-        State:
-          title: State
-          legend: State
-          format: radio
-          filter: 1
-          options:
-            run:
-              title: Stopping
-              color: green
-            stopped:
-              title: Clearing
-              color: green
-        CreatedDateTime:
-          type: datetime
-          format: hidden
-        LastModifiedDateTime:
-          type: datetime
-          format: hidden
-        LastVisitDateTime:
-          type: datetime
-          format: hidden
-        StartDateTime:
-          type: datetime
-          format: hidden
-        EndDateTime:
-          type: datetime
-          format: hidden
-        FinishDateTime:
-          type: datetime
-          format: hidden
-        Brand:
-          schema: Brand
-          legend: Titel
-          title: Merk
-          filter: 1
-        Product:
-          title: Product
-          filter: 1
-          default: true
+      - - Prefix
+        - Tag
+        - Title
+        - Brand
+        - Product
+        - Model
+        - Type
+        - Serie
+      - - Tagname
+        - Version
+        - Shape
+        - Material
+      - - IPAddress
+        - Port
+      properties:
         Model:
+          legend: Product
           title: Model
           filter: 1
         Type:
@@ -1019,36 +833,193 @@ components:
         Material:
           title: Material
           filter: 1
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: System
-        Source:
-          title: Afgeleid van
-          schema: System
-        Children:
-          type: array
-        Message:
-          type: array
-    Attribute:
-      security: *basic_security
-      header:
-        - - Name
-        - - Title
-        - - Description
-      treeTitleAttributeName: Name
+        Brand:
+          filter: 1
+        Subject:
+          title: Subject
+        Summary:
+          title: Summary
+        Product:
+          title: Product(vervalt)
+        IPAddress:
+          legend: Network
+          title: IP address
+        Port:
+          title: Port
+        PollInterval:
+          title: Poll Interval
+          type: number
+          unit: ms
+        ReadAddress:
+          legend: Modbus
+          title: Read Address
+        ReadLength:
+          title: Read Length
+        Community:
+          legend: SNMP
+          title: Community
+    ControlModule:
+      allOf:
+      - EquipmentModule
+      color: rgb(255,192,0)
+    Equipment:
+      allOf:
+      - EquipmentModule
+    System:
+      allOf:
+      - EquipmentModule
+    Product:
+      allOf:
+      - EquipmentModule
+    Device:
+      allOf:
+      - EquipmentModule
+    Control:
+      allOf:
+      - EquipmentModule
+      color: rgb(255,153,0)
       properties:
-        Name:
-          title: Name
-          legend: Attribute
-          idname: name
-        Title:
-          title: title
+        Value:
+          legend: Control
+          title: Value
+          idname: value
+
+        SignalType:
+          title: Type
+          type: select
+          options:
+            Text:
+              title: String
+            D:
+              title: Digital
+              color: blue
+            A:
+              title: Analog
+              color: yellow
+            Bool:
+              title: Boolean
+            SByte:
+              title: Signed Byte
+            UBbyte:
+              title: Unsigned Byte
+            SInt:
+              title: Signed Integer
+            Uint:
+              title: Unsigned Integer
+            SDInt:
+              title: Signed Double Integer
+            UDInt:
+              title: Unsigned Double Integer
+            Float:
+              title: Float
+            Double:
+              title: Double
+
+            Date:
+              title: Date
+            Time:
+              title: Time
+            Datetime:
+              title: Date and time
+            Array:
+              title: Array
+            Object:
+              title: Object
+            '':
+              title: Not applicable
+
+        Permission:
+          title: Permission
+          type: radio
+          options:
+            rw: Read Write
+            r: Read Only
+            w: Write Only
+        Direction:
+          title: Direction (vervalt)
+          type: radio
+          options:
+            I: Input
+            O: Output
+
+        Quality:
+          title: Quality
+          type: radio
+          options:
+            Valid:
+              title: Valid
+              color: green
+            NotValid:
+              title: NotValid
+              color: orange
+              CommunicationError:
+                title: CommunicationError
+                color: red
+              UnInitialized:
+                title: UnInitialized
+                color: gray
+
+        ReadAddress:
+          legend: Modbus
+          title: Read Address
+          type: number
+        # //ReadAddressLength:title: Read Address Length defaultvalue: 1 type: number
+        ReadAddressBit:
+          title: Bit number
+          type: number
+
+        OID:
+          legend: SNMP
+          title: OID
+        SNMPType:
+          title: SNMP Type
+        # //RANGE
+        MinValidValue:
+          legend: Range
+          title: Min Valid Value
+          type: number
+        MaxValidValue:
+          title: Max Valid Value
+          type: number
+        Deadband:
+          title: Deadband
+          type: number
+        MinRawValue:
+          legend: Conversion
+          title: Min Raw Value
+          type: number
+        MaxRawValue:
+          title: Max Raw Value
+          type: number
+        MinEngValue:
+          title: Min Engineering Value
+          type: number
+        MaxEngValue:
+          title: Max Engineering Value
+          type: number
+    ControlIO:
+      allOf:
+        - Control
+    Attribute:
+      allOf:
+        - Item
+      header:
+        - [Tag,Title]
+        - [Tagname, Name]
+        - [AttributeType]
+      properties:
+
+        # Name:
+        #   legend: Attribute
+        #   title: Name
+        # Title:
+        #   title: title
         Description:
           title: Description
-        State:
-          title: State
-          idname: state
+
+        # State:
+        #   title: State
+        #   idname: state
         StateMessage:
           title: StateMessage
         # VALUES
@@ -1100,6 +1071,14 @@ components:
               title: Pre warning 2
             PreWarning_3:
               title: Pre warning 3
+            PreWarning_4:
+              title: Pre warning 4
+            PreWarning_5:
+              title: Pre warning 5
+            PreWarning_6:
+              title: Pre warning 6
+            PreWarning_7:
+              title: Pre warning 7
             Measurement_1:
               title: Measurement 1
             Measurement_2:
@@ -1110,12 +1089,12 @@ components:
               title: Measurement 4
             Measurement_5:
               title: Measurement 5
+            Measurement_6:
+              title: Measurement 6
             MeasurementErrorFlag:
               title: MeasurementErrorFlag
             NotApplicable:
               title: Not Applicable
-        ModifiedDateTime:
-          title: Modified
         ValueType:
           title: Value type
           type: select
@@ -1175,6 +1154,14 @@ components:
           title: Hysteresis
           type: number
           step: 0.1
+        # Master:
+        #   title: Onderdeel van
+        #   legend: Configuratie
+        #   type: array
+        # Src:
+        #   title: Kopie van
+        #   legend: Configuratie
+        #   schema: '*'
         # //AlarmMax:legend: Alarm title: Low Alarm Margin type: number step: 0.1
         # //AlarmMin:title: Low Alarm Margin type: number step: 0.1
         # //AlarmLow:legend: Alarm title: Low Alarm Margin type: number step: 0.1
@@ -1190,1654 +1177,215 @@ components:
         # //AlarmHighAttributeType:title: Attribute type type: select options: AttributeTypeOption
         # //AlarmHighCount:title: High Alarm Count type: number
         # //AlarmHysteresis:title: Hysteresis type: number step: 0.1
-    ControlIO:
-      security: *basic_security
+    Schakelbericht:
+      allOf:
+        - Item
+      className: task
       header:
-        - - Name
-        - - Title
-        - - Description
-      treeTitleAttributeName: Name
-      properties:
-        SignalType:
-          legend: Control IO
-          title: Type
-          type: select
-          options:
-            Text:
-              title: String
-            D:
-              title: Digital
-              color: blue
-            A:
-              title: Analog
-              color: yellow
-            Bool:
-              title: Boolean
-            SByte:
-              title: Signed Byte
-            UBbyte:
-              title: Unsigned Byte
-            SInt:
-              title: Signed Integer
-            Uint:
-              title: Unsigned Integer
-            SDInt:
-              title: Signed Double Integer
-            UDInt:
-              title: Unsigned Double Integer
-            Float:
-              title: Float
-            Double:
-              title: Double
-
-            Date:
-              title: Date
-            Time:
-              title: Time
-            Datetime:
-              title: Date and time
-            Array:
-              title: Array
-            Object:
-              title: Object
-            '':
-              title: Not applicable
-
-        Permission:
-          title: Permission
-          type: radio
-          options:
-            rw: Read Write
-            r: Read Only
-            w: Write Only
-        Direction:
-          title: Direction (vervalt)
-          type: radio
-          options:
-            I: Input
-            O: Output
-        Tag:
-          title: TAG
-          idname: tag
-          default: 1
-
-        Value:
-          title: Value
-          idname: value
-        Quality:
-          title: Quality
-          type: radio
-          options:
-            Valid:
-              title: Valid
-              color: green
-            NotValid:
-              title: NotValid
-              color: orange
-              CommunicationError:
-                title: CommunicationError
-                color: red
-              UnInitialized:
-                title: UnInitialized
-                color: gray
-
-        ReadAddress:
-          legend: Modbus
-          title: Read Address
-          type: number
-        # //ReadAddressLength:title: Read Address Length defaultvalue: 1 type: number
-        ReadAddressBit:
-          title: Bit number
-          type: number
-
-        OID:
-          legend: SNMP
-          title: OID
-        SNMPType:
-          title: SNMP Type
-        # //RANGE
-        MinValidValue:
-          legend: Range
-          title: Min Valid Value
-          type: number
-        MaxValidValue:
-          title: Max Valid Value
-          type: number
-        Deadband:
-          title: Deadband
-          type: number
-        MinRawValue:
-          legend: Conversion
-          title: Min Raw Value
-          type: number
-        MaxRawValue:
-          title: Max Raw Value
-          type: number
-        MinEngValue:
-          title: Min Engineering Value
-          type: number
-        MaxEngValue:
-          title: Max Engineering Value
-          type: number
-    Device:
-      security: *basic_security
-      className: device
-      header:
-        - - Product
-        - - IPAddress
-          - Port
-        - - ReadAddress
-            ReadLength
-            Community
-      treeTitleAttributeName: Product
-      properties:
-        # Product:
-        #   legend: Device
-        #   title: Name
-        #   idname: name
-        Master:
-          legend: Device
-          title: Product
-          idname: name
-        IPAddress:
-          legend: Network
-          title: IP address
-        Port:
-          title: Port
-        PollInterval:
-          title: Poll Interval
-          type: number
-          unit: ms
-        ReadAddress:
-          legend: Modbus
-          title: Read Address
-        ReadLength:
-          title: Read Length
-        Community:
-          legend: SNMP
-          title: Community
-    Product:
-      security: *basic_security
-      btns: [msg,fav,send,clone,edit,show3d,network,printmenu]
-      header:
-        - [Merk,Product]
-        - [Merk]
-        - [Description]
-      treeTitleAttributeName: Product
-      properties:
-        State:
-          legend: Product
-          title: State
-          type: radio
-          filter: 1
-          options:
-            draft:
-              title: Draft
-              color: lightblue
-            concept:
-              title: Concept
-              color: yellow
-            published:
-              title: Published
-              color: green
-            replaced:
-              title: Vervangen
-              color: orange
-            deleted:
-              title: Deleted
-              color: '#ccc'
-        IsPublic:
-          title: Publish
-          type: checkbox
-        Source:
-          title: Afgeleid van
-          schema: Product
-        SerialNumber:
-          title: Serial Number
-        Merk:
-          title: Merk
-          classID: 1016
-        Product:
-          title: Product
-          default: 1
-        Type:
-          title: Type
-        Soort:
-          title: Soort
-        Serie:
-          title: Serie
-        Version:
-          title: Versie
-        Unit:
-          title: Eenheid
-        Content:
-          title: Inhoud
-        ContentUnit:
-          title: Inhoud eenheid
-        ArtNr:
-          find: 1
-          title: Product Code
-        SupplierArtDescription:
-          title: Product omschrijving
-        SupplierWebTitle:
-          title: Product titel
-        ExtraTitle:
-          title: Extra titel
-        Manufacturer:
-          title: Fabrikant
-          classID: 1002
-        Productgroep:
-          title: Productgroep
-        SupplierProductUrl:
-          title: Product pagina
-          type: url
-        AbisTekst:
-          title: AbisTekst
-          find: 1
-        Toepassing:
-          title: Toepassing
-        Oms:
-          title: Extra tekst
-        Description:
-          title: Inleiding
-          type: textarea
-        BodyHTML:
-          title: Hoofdtekst
-          type: div
-        Options:
-          title: Opties
-          type: options
-        filterproperties:
-          type: textarea
-          title: Filter eigenschappen
-        properties:
-          type: textarea
-          title: Extra eigenschappen
-        EAN:
-          title: EAN
-        Btw:
-          title: BTW soort
-          options:
-            - hoog
-            - laag
-          default: hoog
-        Weight:
-          title: Eenheid gewicht
-          unit: kg
-        cp:
-          title: Catalogus prijs
-          type: number
-          format: currency
-          step: 0.01
-
-        Unit1:
-          legend: Artikel
-          title: Besteleenheid
-          filter: 1
-        Unit1Quant:
-          title: Besteleenheid aantal
-          type: number
-          step: 1
-          filter: 1
-        # //Unit2:title: 2e besteleenheid
-        # //Unit2Quant:step: 1 type: number title: 2e besteleenheid aantal
-
-        sd:
-          title: Verkoop korting
-          lv: 1
-          unit: '%'
-        sp:
-          title: Verkoop prijs
-          format: currency
-          readonly: 1
-          get(): |
-            var srcItem = api.items[this.srcID] || {}
-          values(): |
-            return Number(this.values.cp || srcItem.values.cp) * (100 - Number(this.values.sd || srcItem.values.sd || 0)) / 100
-        cd:
-          title: Klant korting
-          lv: 1
-          unit: '%'
-        pd:
-          title: Inkoop korting
-          unit: '%'
-        pp:
-          title: Inkoop prijs
-          readonly: 1
-          format: currency
-          get(): |
-            var srcItem = api.items[this.srcID] || {}
-          values(): |
-            return (this.values.cp || srcItem.values.cp) * (100 - Number(this.values.pd || srcItem.values.pd || 0)) / 100
-        Supplier:
-          title: Leverancier
-          classID: 1002
-        Stock:
-          step: 1
-          type: number
-          title: Op voorraad
-        Loc:
-          title: Locatie
-        minStock:
-          step: 1
-          type: number
-          title: Minimale voorraad
-        orderQuant:
-          step: 1
-          type: number
-          title: Bestel hoeveelheid
-        id:
-          title: Product ID
-          legend: aliconnect
-          readOnly: true
-        IP:
-          legend: Network
-          title: IP adress
-        Port:
-          title: Port
-        Children:
-          type: array
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: System
-    Location:
-      security: *basic_security
-      properties:
-        Title:
-          title: Title
-        Subject:
-          title: Subject
-        Summary:
-          title: Summary
-        Children:
-          type: array
-    dms_System:
-      security: *basic_security
-      treeTitleAttributeName: Product
-      header:
-      - [Brand,Product,Model,Type,Serie,Version,Shape,Material,Quality,Color,Purpose,Unit,Content,ContentUnit,PackageUnit,PackageQuantity]
+      - [ContractorCompanyName,WorkTitle]
       - []
-      - [Description]
+      - [WorkDescription]
       properties:
-        Manufacturer:
-          title: Manufacturer
-          legend: title
-          schema: Company
-        Brand:
-          schema: Brand
-          title: Merk
-          filter: 1
-        Product:
-          title: Product
-          filter: 1
-          default: true
-        System:
-          title: Related systems
-        Name:
-          title: Name
-        Title:
-          title: Title
-        Subject:
-          title: Subject
-        Model:
-          title: Model
-          filter: 1
-        Type:
-          title: Type
-          filter: 1
-        Serie:
-          title: Serie
-          filter: 1
-        Version:
-          title: Version
-          filter: 1
-        Shape:
-          title: Vorm
-          filter: 1
-        Material:
-          title: Material
-          filter: 1
-        Quality:
-          title: Quality
-          filter: 1
-        Color:
-          title: Kleur
-          filter: 1
-        Purpose:
-          title: Ten behoeve van
-          filter: 1
-        Unit:
-          title: Eenheid
-          filter: 1
-        Content:
-          title: Inhoud
-          filter: 1
-        ContentUnit:
-          title: Inhoud eenheid
-          filter: 1
-          enum:
-          - liter
-          - meter
-          - mm
-          - nano
-          - mu
-        Description:
-          title: Omschrijving
-          legend: Toelichting
-          type: textarea
-        BodyHTML:
-          title: Pagina tekst
-          type: div
-        Remark:
-          title: Opmerking
-          type: textarea
-        ProductTitle:
-          title: Product titel
-        keyname:
-          title: Keyname
-          idname: keyname
-        Tag:
-          title: Label
-          idname: tag
-        Subsystem:
-          title: Subsystem
-          legend: Subsystems
-          type: array
-          min: 0
-          max: 100
-          schema: System
-        Dimensions:
-          legend: Afmetingen
-          title: Afmeting
-          filter: 1
-        Length:
-          title: Length
-          type: number
-          step: 10
-          unit: mm
-        Width:
-          title: Width
-          type: number
-          step: 10
-          unit: mm
-        Height:
-          title: Height
-          type: number
-          step: 10
-          unit: mm
-        Weight:
-          title: Weight
-          unit: kg
-        PackageUnit:
-          title: Verpakking eenheid
-          legend: Verpakking
-          filter: 1
-        PackageQuantity:
-          title: Verpakking aantal
-          filter: 1
-          type: number
-          step: 1
-        PackageLength:
-          title: Length
-          type: number
-          step: 10
-          unit: mm
-        PackageWidth:
-          title: Width
-          type: number
-          step: 10
-          unit: mm
-        PackageHeight:
-          title: Height
-          type: number
-          step: 10
-          unit: mm
-        PackageWeight:
-          title: Weight
-          unit: kg
-        EAN:
-          title: EAN
-        PowerKVA:
-          title: Power
-          legend: Verbruik
-          type: number
-          step: 0.100000
-          unit: kVA
-        PowerFuse:
-          title: Fuse
-          type: number
-          step: 1
-          unit: Amp
-        PowerConnection:
-          title: Power connection
-          type: textarea
-        Air:
-          title: Air
-          type: number
-          step: 0.100000
-          unit: NL/MIN 6-8 BAR (dry air)
-        AirConnection:
-          title: Air connection
-          type: textarea
-        Dewpoint:
-          title: Dewpoint
-          type: number
-          step: 0.100000
-          unit: "\xB0C"
-        Water:
-          title: Water
-          type: number
-          step: 0.100000
-          unit: L/MIN
-        WaterConnection:
-          title: Water connection
-          type: textarea
-        StockLocation:
-          title: Locatie
-          legend: Magazijn
-        Stock:
-          title: Voorraad
-          step: 1
-          type: number
-        MinimumStock:
-          title: Minimum voorraad
-          step: 1
-          type: number
-        StartOfStock:
-          title: Begin voorraad
-          step: 1
-          type: number
-        CatalogPrice:
-          title: Catalogus prijs
-          legend: Verkoop
-          type: number
-          format: currency
-          step: 0.010000
-        SalesDiscount:
-          title: Verkoop korting
-          unit: '%'
-        SalesMargin:
-          title: Verkoop marge
-          unit: '%'
-        SalesPrice:
-          title: Verkoop prijs
-          readonly: 1
-          format: currency
-          type: number
-          step: 0.010000
-          get(): >
-              var srcItem = api.items[this.srcID] || { values: {} }
-              return Number(this.values.cp || srcItem.values.cp) * (100 - Number(this.values.sd || srcItem.values.sd || 0)) / 100
-        CustomerDiscount:
-          title: Klant korting
-          unit: '%'
-        FAT:
-          default: hoog
-          title: BTW soort, invoern in FAT
-          options:
-          - hoog
-          - laag
-        FixedCostPrice:
-          title: Kostprijs
-          lv: 1
-          type: number
-          step: 0.010000
-        Supplier:
-          title: Leverancier
-          legend: Inkoop
-          schema: company
-        PurchaseDiscount:
-          title: Inkoop korting
-          unit: '%'
-        PurchasePrice:
-          title: Inkoop prijs
-          readonly: 1
-          format: currency
-          get(): >
-              var srcItem = api.items[this.srcID] || { values: {} }
-              return (this.values.cp || srcItem.values.cp) * (100 - Number(this.values.pd || srcItem.values.pd || 0)) / 100
-        OrderQuant:
-          title: Inkoop hoeveelheid
-          step: 1
-          type: number
-        CAD:
-          title: CAD model
-          legend: CAD model
-          type: json1
-        ObjectChildren:
-          title: CAD onderdelen
-          type: json1
-        PosX:
-          legend: Position
-          title: Positie X
-        PosY:
-          title: Positie Y
-        PosZ:
-          title: Positie Z
-        RotX:
-          title: Rotatie X-as
-        RotY:
-          title: Rotatie Y-as
-        RotZ:
-          title: Rotatie Z-as
         State:
-          title: State
-          legend: State
+          format: radio
+          format: select
           filter: 1
           options:
-            research:
-              title: Research
-              color: lightblue
-            design:
-              title: Design
-              color: lightblue
-            draft:
-              title: Draft
-              color: lightblue
-            concept:
-              title: Concept
-              color: yellow
-            final:
-              title: Final
-              color: yellow
-            published:
-              title: Published
-              color: green
-            sales:
-              title: Sales
+            request:
+              title: Aanvraag
               color: orange
-            ordered:
-              title: Ordered
-              color: orange
-            build:
-              title: Build
-              color: yellow
-            deleted:
-              title: Deleted
+            reject:
+              title: Afgewezen
               color: black
-            deprecated:
-              title: Deprecated
-              color: orange
-            replaced:
-              title: Replaced
-              color: orange
-            aborted:
-              title: Aborted
+            inBehandeling:
+              title: In behandeling
+              color: yellow
+            scheduled:
+              title: In de planning
+              color: lightblue
+            run:
+              title: Actief
               color: green
-            stopped:
-              title: Stopped
-              color: green
-            idle:
-              title: Idle
-              color: green
-            running:
-              title: Running
-              color: green
-            complete:
-              title: Complete
-              color: green
-            suspended:
-              title: Suspended
-              color: green
-            held:
-              title: Held
-              color: green
-            aborting:
-              title: Aborting
-              color: green
-            stopping:
-              title: Stopping
-              color: green
-            clearing:
-              title: Clearing
-              color: green
-            resetting:
-              title: Resetting
-              color: green
-            starting:
-              title: Starting
-              color: green
-            completing:
-              title: Completing
-              color: green
-            suspending:
-              title: Suspending
-              color: green
-            unsuspending:
-              title: Unsuspending
-              color: green
-            holding:
-              title: Holding
-              color: green
-            unholding:
-              title: Unholding
-              color: green
-        WWW:
-          title: Deze pagina tonen op internet
-          type: checkbox
-          idname: IsPublic
-        News:
-          title: Deze pagina opnemen in nieuwsberichten
-          type: checkbox
-        CreatedDT:
-          title: Created
-          legend: Planning
-          type: date
-          idname: createdDT
+            seitchedOff:
+              title: Uitgeschakeld
+              color: red
+            hold:
+              title: In de wacht
+              color: blue
+            finished:
+              title: Afgerond
+              color: white
+        Station2:
+          options:
+            1:
+              title: Station J2
+            2:
+              title: Station C
+            3:
+              title: Station H
+        Master:
+          format: hidden
+        Fav:
+          type: boolean
+          format: hidden
+        UserID:
+          type: integer
+          format: hidden
+        Files:
+          legend: Algemeen
+          # type: files
+          format: files
+        View:
+          format: sharecam
+        ID:
+          type: integer
+          readonly: true # Tabstop actief
+          disabled: true # Geen tabstop
+          title: Schakelberichtnummer
+        CreatedDateTime:
+          type: datetime
+          placeholder: Created
+          disabled: true # Geen tabstop
+        LastModifiedDateTime:
+          type: datetime
+          placeholder: Modfied
+          disabled: true # Geen tabstop
         StartDateTime:
-          title: Start
-          type: date
-          idname: StartDateTime
+          type: datetime
+          placeholder: Start
+          public: true
         EndDateTime:
-          title: Deadline
-          type: date
-          idname: EndDateTime
+          type: datetime
+          placeholder: Deadline
+          public: true
         FinishDateTime:
-          title: Completed
-          type: date
-          idname: FinishDateTime
-        Master:
-          title: Onderdeel van
-          legend: Referenties
-          schema: system
-          idname: masterID
-          typeID: 11
-        Source:
-          title: Afgeleid van
-          schema: system
-          idname: srcID
-        Layout:
-          title: Layout
-          schema: layout
-        SystemFolder:
-          title: Network folder
-        TagName:
-          title: TagName
-        SofonNr:
-          title: Sofon nr
-        ProjectNr:
-          title: Project nr
-          schema: project
-        cspnummer:
-          title: CSP nummer
-        Children:
+          type: datetime
+          placeholder: Gereed
+          public: true
+
+        Station1:
+          schema: dms_Location
+          filter: MasterId eq 3490364
+          # options:
+          #   1:
+          #     title: Station J2
+          #   2:
+          #     title: Station C
+          #   3:
+          #     title: Station H
+          # schema: System
+          # filter: Typical eq Station
+
+
+        ContractorCompanyName:
+          filter: 1
+          legend: Contractor
+          format: text
+          schema: Company
+        ContractorContact:
+          format: text
+          schema: Contact
+        ContractorEmail:
+          type: string
+          format: email
+          mailto: true
+          # required: true
+          # pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$',
+        ContractorBusinessAddres:
+          format: address
+        ContractorOtherAddres:
+          format: address
+        WorkTitle:
+          legend: Work
+          format: text
+        WorkDescription:
+          format: html
+        WotkLocations:
+          format: address
+        Station:
+          schema: dms_Location
+          filter: MasterId eq 3490364
+          # options:
+          #   1:
+          #     title: Station J2
+          #   2:
+          #     title: Station C
+          #   3:
+          #     title: Station H
+          # schema: System
+          # filter: Typical eq Station
+        Uitschakelingen:
+          # schema: System
+          # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
+          format: 'radio'
+          options:
+            1:
+              title: Hoofdgroep
+            2:
+              title: SubgroepA
+            3:
+              title: SubgroepB
+            4:
+              title: SubgroepC
           type: array
-    dms_Location:
-      security: *basic_security
-      properties:
-        Title:
-          legend: Title
-          title: Title
-        Subject:
-          title: Subject
-        Summary:
-          title: Summary
-        Children:
+          defaultvalue: 2,3
+          # manimum: 1
+          # maximum: 5
+
+        UitschakelingenTwee:
+          # schema: System
+          # filter: Typical eq Energiegroep,TempRegelaar and Master eq @Station
           type: array
-        Master:
-          title: Onderdeel van
-          legend: Configuratie
-          schema: System
-        Source:
-          title: Afgeleid van
-          schema: System
-    dms_Group:
-      security: *basic_security
-      properties:
-        Title:
-          title: Title
-        Subject:
-          title: Subject
-        Summary:
-          title: Summary
-        Children:
+          defaultvalue: '2,3'
+          options:
+            1:
+              title: Hoofdgroep
+            2:
+              title: SubgroepA
+            3:
+              title: SubgroepB
+            4:
+              title: SubgroepC
+          # manimum: 1
+          # maximum: 5
+
+        Accepted:
+          legend: Acceptance
+          format: checkbox
+        AcceptedComment:
+          format: html
+
+        VrijgaveVeiligstellen:
+          legend: Release
+          format: checkbox
+        ArrivalDateTime:
+          format: datetime
+
+        WorkStarted:
+          legend: WorkStart
+          format: checkbox
+        WorkStartSignature:
+          type: image
+          format: signature
+
+        SwitchOff:
+          legend: SwitchOff
+          format: checkbox
+
+        WorkFinished:
+          legend: WorkActive
+          format: checkbox
+        WorkFinish:
+          type: image
+          format: signature
+
+        SwitchOn:
+          legend: SwitchOn
+          format: checkbox
+        WorkFinish:
+          type: image
+          format: signature
+        Messages:
+          format: hidden
+          schema: Message
           type: array
-    BRANDMELDCENTRALE:
-      properties:
-        ALG_STORING:
-          alarmLow: 0
-          alarmLowAttributeType: criticalFailure
-          attributeType: criticalFailure
-          description: Algemene storing gedetecteerd
-          enum: No failure, Failure
-          low: 0
-          rawMax: attribute
-          title: Algemene storing
-          type: bool
-        BRANDMELDING:
-          alarmLow: 0
-          alarmLowAttributeType: PreWarning_2
-          attributeType: PreWarning_2
-          description: Brandmelding gedetecteerd
-          enum: No failure, Failure
-          low: 0
-          rawMax: attribute
-          title: Brandmelding
-          type: bool
-        IN_BEDRIJF:
-          attributeType: Running
-          description: In bedrijf gedetecteerd
-          enum: Not Active, Active
-          rawMax: attribute
-          selected: 1
-          title: In bedrijf
-          type: bool
-        MELDER_DEFECT_GEB_ALG:
-          alarmLow: 0
-          alarmLowAttributeType: PreWarning_1
-          attributeType: PreWarning_1
-          description: Defecte melder gedetecteerd binnen gebied algemeen
-          enum: No failure, Failure
-          low: 0
-          rawMax: attribute
-          title: Melder defect gebied algemeen
-          type: bool
-        MELDER_DEFECT_GEB_HS:
-          alarmLow: 0
-          alarmLowAttributeType: PreWarning_1
-          attributeType: PreWarning_1
-          description: Defecte melder gedetecteerd binnen gebied hoogspanning
-          enum: No failure, Failure
-          low: 0
-          rawMax: attribute
-          title: Melder defect gebied hoogspanning
-          type: bool
-        MELDER_DEFECT_GEB_S1_S2:
-          alarmLow: 0
-          alarmLowAttributeType: PreWarning_1
-          attributeType: PreWarning_1
-          description: Defecte melder gedetecteerd binnen gebied S1 en\/of S2
-          enum: No failure, Failure
-          low: 0
-          rawMax: attribute
-          title: Melder defect gebied S1\/S2
-          type: bool
-    HOOGSPANNINGSVERDELER:
-      properties:
-        BEV_Y:
-          attributeType: criticalFailure
-          description: Vermogensschakelaar beveiliging aangesproken
-          enum: No failure, Failure
-          title: Beveiliging aangesproken
-          type: bool
-        IN:
-          attributeType: Running
-          description: Vermogenschakelaar ingeschakeld
-          enum: Not Active, Active
-          title: Ingeschakeld
-          type: bool
-        STUURSTROOMBEV:
-          attributeType: Security
-          description: Vermogensschakelaar stuurstroom beveiliging aangesproken
-          enum: No failure, Failure
-          low: 0
-          title: Stuurstroom beveiliging aangesproken
-          type: bool
-        TYPE_1_2:
-          Source: null,
-          strSystemName: TYPE_1_2
-        TYPE_3:
-          Source: null,
-          strSystemName: TYPE_3
-        UIT:
-          attributeType: PreWarning_1
-          description: Vermogensschakelaar uitgeschakeld
-          enum: No failure, Failure
-          title: Uitgeschakeld
-          type: bool
-    KLIMAATMETER:
-      properties:
-        REL_VOCHTIGHEID:
-          alarmHigh: 29.5
-          alarmHighAttributeType: PreWarning_3
-          alarmHysteresis: 0.5
-          attributeType: Measurement_2
-          criticalFailure: 0
-          description: Gemeten vochtigheid in de ruimte
-          highAlert: 38
-          lowAlert: 32
-          maxvalue: 40
-          minvalue: 30
-          nonCriticalFailure: 0
-          quality: Valid
-          title: Gemeten vochtigheid
-          propertyType: modbus
-          unit: '%'
-          value: 33.8
-          type: double
-        TEMPERATUUR:
-          alarmHigh: 33.0
-          alarmHighAttributeType: PreWarning_1
-          alarmHysteresis: 0
-          alarmLow: 32.0
-          alarmLowAttributeType: PreWarning_2
-          attributeType: Measurement_1
-          criticalFailure: 0
-          description: Gemeten temperatuur in de ruimte
-          displayHigh: 21
-          displayLow: 19
-          displayMax: 30
-          displayMin: 10
-          displayOptimum: 20
-          nonCriticalFailure: 0
-          quality: Valid
-          readRegisterLength: attribute
-          title: Gemeten temperatuur
-          unit: \u00b0C
-          value: 30.8
-          type: double
-    KLIMAATUNIT:
-      properties:
-        IN_BEDRIJF:
-          attributeType: Running
-          description: In bedrijf
-          enum: Not Active, Active
-          rawMax: attribute
-          title: In bedrijf
-          type: bool
-        IN_STORING:
-          attributeType: criticalFailure
-          description: In storing
-          enum: No failure, Failure
-          rawMax: attribute
-          selected: 1
-          title: In storing
-          type: bool
-    LAAGSPANNINGSVERDELER_1:
-      properties:
-        ALG_AUTOMATEN_TRIP_S1:
-          attributeType: criticalFailure
-          description: Verzamelmelding automaten S1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Verzamelmelding automaten S1 getripped
-          type: bool
-        ALG_AUTOMATEN_TRIP_S2:
-          attributeType: criticalFailure
-          description: Verzamelmelding automaten S2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Verzamelmelding automaten S2 getripped
-          type: bool
-        IN_EXTNSA_IN:
-          attributeType: NotApplicable
-          description: Ingaande groep NSA extern ingeschakeld
-          enum: Not Active, Active
-          title: Ingaande groep NSA extern ingeschakeld
-          type: bool
-        IN_EXTNSA_TRIP:
-          attributeType: criticalFailure
-          description: Ingaande groep NSA extern getripped
-          enum: No failure, Failure
-          title: Ingaande groep NSA extern getripped
-          type: bool
-        IN_NET_IN:
-          attributeType: Running
-          description: Vermogensschakelaar NET ingeschakeld
-          enum: Not Active, Active
-          title: Vermogensschakelaar NET ingeschakeld
-          type: bool
-        IN_NET_TRIP:
-          attributeType: criticalFailure
-          description: Ingaande groep NET getripped
-          enum: No failure, Failure
-          title: Ingaande groep NET getripped
-          type: bool
-        IN_NSA_IN:
-          attributeType: PreWarning_1
-          description: Vermogensschakelaar NSA ingeschakeld
-          enum: Not Active, Active
-          title: Vermogensschakelaar NSA ingeschakeld
-          type: bool
-        IN_NSA_TRIP:
-          attributeType: criticalFailure
-          description: Ingaande groep NSA getripped
-          enum: No failure, Failure
-          title: Ingaande groep NSA getripped
-          type: bool
-        OVERSPBEV_DEFECT:
-          attributeType: Security
-          description: Overspanningsbeveiliging aangesproken
-          enum: No failure, Failure
-          low: 0
-          title: Overspanningsbeveiliging aangesproken
-          type: bool
-        UIT_LSV_1_1_IN:
-          attributeType: Locking
-          description: Afgaand veld naar LSV-1.1 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Afgaand veld naar LSV-1.1 ingeschakeld
-          type: bool
-        UIT_LSV_1_1_TRIP:
-          attributeType: criticalFailure
-          description: Afgaand veld naar LSV-1.1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Afgaand veld naar LSV-1.1 getripped
-          type: bool
-        UIT_LSV_1_2_IN:
-          attributeType: PreWarning_1
-          description: Afgaand veld naar LSV-1.2 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Afgaand veld naar LSV-1.2 ingeschakeld
-          type: bool
-        UIT_LSV_1_2_TRIP:
-          attributeType: criticalFailure
-          description: Afgaand veld naar LSV-1.2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Afgaand veld naar LSV-1.2 getripped
-          type: bool
-        UIT_LSV_1_3_IN:
-          attributeType: PreWarning_1
-          description: Afgaand veld naar LSV-1.3 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Afgaand veld naar LSV-1.3 ingeschakeld
-          type: bool
-        UIT_LSV_1_3_TRIP:
-          attributeType: criticalFailure
-          description: Afgaand veld naar LSV-1.3 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Afgaand veld naar LSV-1.3 getripped
-          type: bool
-    LAAGSPANNINGSVERDELER_1_1_1:
-      properties:
-        IN_UPS_IN:
-          attributeType: Running
-          description: Ingaande groep UPS ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Ingaande groep UPS ingeschakeld
-          type: bool
-        OVERSPBEV_DEFECT:
-          attributeType: Security
-          description: Overspanningsbeveiliging aangesproken
-          enum: No failure, Failure
-          low: 0
-          title: Overspanningsbeveiliging aangesproken
-          type: bool
-        UIT_ALCMS_0624_1_IN:
-          attributeType: PreWarning_1
-          description: Voeding ALCMS 0624-1 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding ALCMS 0624-1 ingeschakeld
-          type: bool
-        UIT_ALCMS_0624_1_TRIP:
-          attributeType: criticalFailure
-          description: Voeding ALCMS 0624-1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding ALCMS 0624-1 getripped
-          type: bool
-        UIT_ALCMS_0624_2_IN:
-          attributeType: PreWarning_1
-          description: Voeding ALCMS 0624-2 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding ALCMS 0624-2 ingeschakeld
-          type: bool
-        UIT_ALCMS_0624_2_TRIP:
-          attributeType: PreWarning_1
-          description: Voeding ALCMS 0624-2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding ALCMS 0624-2 getripped
-          type: bool
-        UIT_BMC_IN:
-          attributeType: PreWarning_2
-          description: Voeding BMC ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding BMC ingeschakeld
-          type: bool
-        UIT_BMC_TRIP:
-          attributeType: criticalFailure
-          description: Voeding BMC getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding BMC getripped
-          type: bool
-        UIT_BRANDWEERSCHAKELAAR_IN:
-          attributeType: PreWarning_1
-          description: Voeding brandweerschakelaar ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding brandweerschakelaar ingeschakeld
-          type: bool
-        UIT_BRANDWEERSCHAKELAAR_TRIP:
-          attributeType: criticalFailure
-          description: Voeding brandweerschakelaar getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding brandweerschakelaar getripped
-          type: bool
-        UIT_CCR_0624_S1_IN:
-          attributeType: PreWarning_1
-          description: Voeding CCR 0624 S1 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding CCR 0624 S1 ingeschakeld
-          type: bool
-        UIT_CCR_0624_S1_TRIP:
-          attributeType: criticalFailure
-          description: Voeding CCR 0624 S1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding CCR 0624 S1 getripped
-          type: bool
-        UIT_CCR_0624_S2_IN:
-          attributeType: PreWarning_1
-          description: Voeding CCR 0624 S2 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding CCR 0624 S2 ingeschakeld
-          type: bool
-        UIT_CCR_0624_S2_TRIP:
-          attributeType: criticalFailure
-          description: Voeding CCR 0624 S2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding CCR 0624 S2 getripped
-          type: bool
-        UIT_LOCAL_TWP_IN:
-          attributeType: PreWarning_2
-          description: Voeding LOCAL TWP ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding LOCAL TWP ingeschakeld
-          type: bool
-        UIT_LOCAL_TWP_TRIP:
-          attributeType: criticalFailure
-          description: Voeding LOCAL TWP getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding LOCAL TWP getripped
-          type: bool
-        UIT_MON_0624_S1_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON 0624 S1 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON 0624 S1 ingeschakeld
-          type: bool
-        UIT_MON_0624_S1_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON 0624 S1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON 0624 S1 getripped
-          type: bool
-        UIT_MON_0624_S2_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON 0624 S2 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON 0624 S2 ingeschakeld
-          type: bool
-        UIT_MON_0624_S2_TRIP:
-          attributeType: PreWarning_2
-          description: Voeding MON 0624 S2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON 0624 S2 getripped
-          type: bool
-        UIT_MON_LS1_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON LS1 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON LS1 ingeschakeld
-          type: bool
-        UIT_MON_LS1_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON LS1 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON LS1 getripped
-          type: bool
-        UIT_MON_LS2_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON LS2 ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON LS2 ingeschakeld
-          type: bool
-        UIT_MON_LS2_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON LS2 getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON LS2 getripped
-          type: bool
-        UIT_MON_NSV_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON NSV ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON NSV ingeschakeld
-          type: bool
-        UIT_MON_NSV_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON NSV getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON NSV getripped
-          type: bool
-        UIT_MON_OPER_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON OPER ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON OPER ingeschakeld
-          type: bool
-        UIT_MON_OPER_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON OPER getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON OPER getripped
-          type: bool
-        UIT_MON_US_IN:
-          attributeType: PreWarning_2
-          description: Voeding MON US ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding MON US ingeschakeld
-          type: bool
-        UIT_MON_US_TRIP:
-          attributeType: criticalFailure
-          description: Voeding MON US getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding MON US getripped
-          type: bool
-        UIT_RELAISKAST_UPS_IN:
-          attributeType: PreWarning_1
-          description: Voeding relaiskast UPS ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding relaiskast UPS ingeschakeld
-          type: bool
-        UIT_RELAISKAST_UPS_TRIP:
-          attributeType: criticalFailure
-          description: Voeding relaiskast UPS getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding relaiskast UPS getripped
-          type: bool
-        UIT_SYS_IN:
-          attributeType: PreWarning_2
-          description: Voeding SYS ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding SYS ingeschakeld
-          type: bool
-        UIT_SYS_TRIP:
-          attributeType: criticalFailure
-          description: Voeding SYS getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding SYS getripped
-          type: bool
-        UIT_TELEMATICS_IN:
-          attributeType: PreWarning_1
-          description: Voeding Telematics ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding Telematics ingeschakeld
-          type: bool
-        UIT_TELEMATICS_TRIP:
-          attributeType: criticalFailure
-          description: Voeding Telematics getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding Telematics getripped
-          type: bool
-        UIT_TRAKA_IN:
-          attributeType: PreWarning_2
-          description: Voeding Traka ingeschakeld
-          enum: Active, Not Active
-          low: 0
-          title: Voeding Traka ingeschakeld
-          type: bool
-        UIT_TRAKA_TRIP:
-          attributeType: criticalFailure
-          description: Voeding Traka getripped
-          enum: No failure, Failure
-          low: 0
-          title: Voeding Traka getripped
-          type: bool
-    LAAGSPANNINGSVERDELER_1_X:
-      properties:
-        IN_LSV1_IN:
-          attributeType: Running
-          description: Ingaande voeding van LSV-1 ingeschakeld
-          enum: Not Active, Active
-          title: Ingaande voeding van LSV-1 ingeschakeld
-          type: bool
-        LAAGSPANNINGSVERDELER_1_1:
-          Product: LAAGSPANNINGSVERDELER_1_1
-          Source: null,
-        LAAGSPANNINGSVERDELER_1_Y:
-          Product: LAAGSPANNINGSVERDELER_1_Y
-          Source: null,
-        OVERSPBEV_DEFECT:
-          attributeType: Security
-          description: Overspanningsbeveiliging aangesproken
-          enum: No failure, Failure
-          low: 0
-          title: Overspanningsbeveiliging aangesproken
-          type: bool
-    LAAGSPANNINGSVERDELER_GROEP:
-      properties:
-        UIT_GROEP_IN:
-          type: text
-        UIT_GROEP_TRIP:
-          type: text
-    MONITORINGSYSTEEM:
-      properties:
-        HDD_USED_SPACE:
-          attributeType: Measurement_1
-          description: Hoeveelheid harddiskruimte die door het data monitoring systeem wordt gebruikt
-          high: 80
-          hysteresis: 2
-          maximum: 100
-          minimum: 0
-          optimum: 50
-          title: Harddiskruimte verbruikt
-          unit: '%'
-          type: integer
-        MEMORY_USED_SPACE:
-          attributeType: Measurement_2
-          description: Hoeveelheid geheugenruimte die door het data monitoring systeem wordt gebruikt
-          high: 90
-          hysteresis: 2
-          maximum: 100
-          minimum: 0
-          optimum: 50
-          title: Geheugenruimte verbruikt
-          unit: '%'
-          type: integer
-        TIME_SYNC:
-          attributeType: nonCriticalFailure
-          description: Synchroniseren van de PC tijd met de NTP server mislukt
-          enum: No failure, Failure, Failure, Failure
-          high: 1
-          selected: 1
-          title: Tijdsynchronisatie mislukt
-          type: bool
-        WATCHDOG_ACSM:
-          attributeType: Measurement_3
-          description: Watchdog tellerwaarde die wordt verstuurd naar het ACSM
-          title: Watchdog naar ACSM
-          type: integer
-    NSA:
-      properties:
-        ALG_STOR:
-          attributeType: criticalFailure
-          description: Algemene storing gedetecteerd
-          enum: No failure, Failure
-          low: 0
-          title: Algemene storing
-          type: bool
-        BATTERIJLADER_STARTACCU_STOR:
-          attributeType: criticalFailure
-          description: Batterijlader startaccu storing
-          enum: No failure, Failure
-          low: 0
-          title: Batterijlader startaccu storing
-          type: bool
-        BRANDST_TRIMPOMP_BEDRIJF:
-          attributeType: NotApplicable
-          description: Brandstof trimpomp in bedrijf
-          enum: Not Active, Active
-          title: Brandstof trimpomp in bedrijf
-          type: bool
-        DAGTANK_LEKKAGE:
-          attributeType: PreWarning_1
-          description: Niveau lekbak dagtank hoog
-          enum: No failure, Failure
-          low: 0
-          title: Niveau lekbak dagtank hoog
-          type: bool
-        DAGTANK_NIVO_TEHOOG:
-          attributeType: PreWarning_1
-          description: Dagtank niveau te hoog
-          enum: No failure, Failure
-          low: 0
-          title: Dagtank niveau te hoog
-          type: bool
-        DAGTANK_NIVO_TELAAG:
-          attributeType: PreWarning_1
-          description: Dagtank niveau te laag
-          enum: No failure, Failure
-          low: 0
-          title: Dagtank niveau te laag
-          type: bool
-        DYNAMO_LAADSTOR:
-          attributeType: nonCriticalFailure
-          description: Dynamo laadstoring
-          enum: No failure, Failure
-          low: 0
-          title: Dynamo laadstoring
-          type: bool
-        GEN_OVERBELAST:
-          attributeType: Security
-          description: Generator overbelast
-          enum: No failure, Failure
-          low: 0
-          title: Generator overbelast
-          type: bool
-        GEN_SCHAK_UIT:
-          attributeType: PreWarning_3
-          description: Generatorschakelaar uitgeschakeld
-          enum: Active, Not Active
-          title: Generatorschakelaar uitgeschakeld
-          type: bool
-        KEUZESCHAK_AUTO:
-          attributeType: Maintenance
-          description: Keuzeschakelaar in stand auto
-          enum: Active, Not Active
-          low: 0
-          selected: 1
-          title: KEUZESCHAK_AUTO
-          title: Keuzeschakelaar in stand auto
-          type: bool
-        KOELWATER_NIVO_TELAAG:
-          attributeType: Security
-          description: Koelwaterniveau te laag
-          enum: No failure, Failure
-          low: 0
-          title: Koelwaterniveau te laag
-          type: bool
-        KOELWATER_TEMP_TEHOOG:
-          attributeType: criticalFailure
-          description: Koelwatertemperatuur te hoog
-          enum: No failure, Failure
-          low: 0
-          title: Koelwatertemperatuur te hoog
-          type: bool
-        NET_SCHAK_UIT:
-          attributeType: PreWarning_3
-          description: Netschakelaar uitgeschakeld
-          enum: Not Active, Active
-          low: 0
-          title: Netschakelaar uitgeschakeld
-          type: bool
-        NOODSTOP:
-          attributeType: Locking
-          description: Noodstop ingeschakeld
-          enum: No failure, Failure
-          low: 0
-          title: Noodstop ingeschakeld
-          type: bool
-        NOODSTROOM_BEDRIJF:
-          attributeType: Running
-          description: Noodstroom bedrijf geactiveerd
-          enum: Not Active, Active
-          title: Noodstroom bedrijf
-          type: bool
-        OLIEDRUK_TELAAG:
-          attributeType: Security
-          description: Oliedruk te laag
-          enum: No failure, Failure
-          low: 0
-          title: Oliedruk te laag
-          type: bool
-        TOERENTAL_TEHOOG:
-          attributeType: Security
-          description: Toerental te hoog
-          enum: No failure, Failure
-          low: 0
-          title: Toerental te hoog
-          type: bool
-        VOORRAADTANK_NIVO_LAAG:
-          attributeType: PreWarning_2
-          description: Niveau voorraadtank laag
-          enum: No failure, Failure
-          low: 0
-          title: VOORRAADTANK_NIVO_LAAG
-          title: Niveau voorraadtank laag
-          type: bool
-        VOORRAADTANK_NIVO_TEHOOG:
-          attributeType: PreWarning_2
-          description: Voorraadtank niveau te hoog
-          enum: No failure, Failure
-          low: 0
-          title: Voorraadtank niveau te hoog
-          type: bool
-        VOORRAADTANK_NIVO_TELAAG:
-          attributeType: PreWarning_2
-          description: Voorraadtank niveau te laag
-          enum: No failure, Failure
-          low: 0
-          title: Voorraadtank niveau te laag
-          type: bool
-        VRIJG_NSA:
-          attributeType: NotApplicable
-          description: Vrijgave beveiligingen
-          enum: Not Active, Active
-          title: Vrijgave beveiligingen
-          type: bool
-    POWERMETER:
-      properties:
-        COSPHI:
-          attributeType: Measurement_3
-          description: Cosinus Phi meetwaarde
-          title: Cosinus Phi meting
-          unit: '%'
-          type: double
-        KVAH:
-          attributeType: Measurement_2
-          description: kVAh meetwaarde
-          title: kVAh meting
-          unit: kVAh
-          type: double
-        KWH:
-          attributeType: Measurement_1
-          description: kWh meetwaarde
-          title: kWh meting
-          unit: kWh
-          type: double
-        V_FASE_1:
-          attributeType: NotApplicable
-          description: Fase 1 Voltage meetwaarde
-          title: Fase 1 Voltage meting
-          unit: V
-          type: integer
-        V_FASE_2:
-          attributeType: NotApplicable
-          description: Fase 2 Voltage meetwaarde
-          hysteresis: Attribute
-          title: V_FASE_2
-          title: Fase 2 Voltage meting
-          unit: V
-          type: integer
-        V_FASE_3:
-          attributeType: NotApplicable
-          description: Fase 3 Voltage meetwaarde
-          hysteresis: Attribute
-          title: V_FASE_3
-          title: Fase 3 Voltage meting
-          unit: V
-          type: integer
-    REGELAARKAST:
-      properties:
-        VERZAMEL_STORING:
-          attributeType: criticalFailure
-          description: Verzamelstoring CCR network cabinet
-          enum: No failure, Failure
-          low: 0
-          title: Verzamelstoring
-          type: bool
-    RIO:
-      properties:
-        Status:
-          attributeType: NotApplicable
-          description: Status van het RIO systeem
-          enum: No Failure, Failure
-          low: 0
-          title: Status
-          title: Status van het RIO systeem
-          type: bool
-    SWITCH_4P:
-      properties:
-        STATUS_P1:
-          attributeType: NotApplicable
-          description: Actuele status van poort 1
-          enum: Not defined, Up, Down, Testing, Unknown, Dormant, Not present, Lower layer down
-          title: Actuele status van poort 1
-          type: integer
-        STATUS_P2:
-          attributeType: NotApplicable
-          description: Actuele status van poort 2
-          enum: Not defined, Up, Down, Testing, Unknown, Dormant, Not present, Lower layer down
-          title: Actuele status van poort 2
-          type: integer
-        STATUS_P3:
-          attributeType: NotApplicable
-          description: Actuele status van poort 3
-          enum: Not defined, Up, Down, Testing, Unknown, Dormant, Not present, Lower layer down
-          title: Actuele status van poort 3
-          type: integer
-        STATUS_P4:
-          attributeType: NotApplicable
-          description: Actuele status van poort 4
-          enum: Not defined, Up, Down, Testing, Unknown, Dormant, Not present, Lower layer down
-          title: Actuele status van poort 4
-          type: integer
-    UPS:
-      properties:
-        ALG_STOR:
-          attributeType: criticalFailure
-          description: Algemene storing gedetecteerd
-          enum: No failure, Failure
-          low: 0
-          title: Algemene storing
-          type: bool
-        BATT_BEDRIJF:
-          attributeType: Running
-          description: Batterij bedrijf gedetecteerd
-          enum: Not Active, Active
-          low: 0
-          title: Batterij bedrijf
-          type: bool
-        BATT_SPANNING_LAAG:
-          attributeType: PreWarning_1
-          description: Batterijspanning laag gedetecteerd
-          enum: No failure, Failure
-          low: 0
-          title: Batterijspanning laag
-          type: bool
-        BYPASS_BELAST:
-          attributeType: PreWarning_2
-          description: Belasting via bypass gedetecteerd
-          enum: Not Active, Active
-          title: Bypass belast
-          type: bool
