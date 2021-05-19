@@ -2,16 +2,15 @@
 
 Welkom op Aliconnect Schiphol
 
-- [Schiphol](https://aliconnect.github.io/schiphol) [Wiki](https://github.com/aliconnect/schiphol/wiki?type=wiki)
-
 ### Reference
-- [Aliconnect](https://aliconnect.github.io/aliconnect) [Wiki](https://github.com/aliconnect/aliconnect/wiki?type=wiki)
-- [SourceForce](https://aliconnect.github.io/sourceforce) [Wiki](https://github.com/aliconnect/sourceforce/wiki?type=wiki)
-- [Alicon](https://aliconnect.github.io/alicon) [Wiki](https://github.com/aliconnect/alicon/wiki?type=wiki)
-- [API](https://aliconnect.github.io/api) [Wiki](https://github.com/aliconnect/api/wiki?type=wiki)
+- [Schiphol QNode](//schiphol-qnode.github.io) | [Wiki](//github.com/schiphol-qnode/schiphol-qnode.github.io/wiki?type=wiki) | [GitHub](https://github.com/schiphol-qnode)
+    - [QNode](//schiphol-qnode.github.io) | [Wiki](//github.com/schiphol-qnode/schiphol-qnode.github.io/wiki?type=wiki) | [GitHub](https://github.com/schiphol-qnode)
+    - [Station J2](//schiphol-qnode.github.io/j2) | [GUI](https://schiphol-qnode.github.io/j2/webroot) | [GitHub](https://github.com/schiphol-qnode/j2)
+    - [Station P](//schiphol-qnode.github.io/p) | [GUI](https://schiphol-qnode.github.io/p/webroot) | [GitHub](https://github.com/schiphol-qnode/p)
+    - [Station T](//schiphol-qnode.github.io/t) | [GUI](https://schiphol-qnode.github.io/t/webroot) | [GitHub](https://github.com/schiphol-qnode/t)
 
-### Producten
-- [QNode](https://aliconnect.github.io/qnode) [Wiki](https://github.com/aliconnect/qnode/wiki?type=wiki)
-
-### Integratoren
-- [Dynniq](https://aliconnect.github.io/dynniq) [Wiki](https://github.com/aliconnect/dynniq/wiki?type=wiki)
+### Support
+- [Dynniq QNode](//dynniq-qnode.github.io) | [Wiki](//github.com/dynniq-qnode/dynniq-qnode.github.io/wiki?type=wiki) | [GitHub](https://github.com/dynniq-qnode)
+- [Alicon](//alicon.aliconnect.nl) | [Wiki](//alicon.aliconnect.nl/wiki)
+- [Aliconnect](//aliconnect.nl) | [Wiki](//aliconnect.nl/wiki)
+- [SourceForce](//sourceforce-nl.github.io) | [Wiki](//github.com/sourceforce-nl/sourceforce-nl.github.io/wiki?type=wiki) | [GitHub](https://github.com/sourceforce-nl)
