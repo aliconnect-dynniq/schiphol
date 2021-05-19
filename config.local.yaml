@@ -19,13 +19,13 @@ ws:
 client:
   client_id: C52ABA40-11FE-4400-90B9-CEE5BDA2C5AA
   servers:
-    - url: https://schiphol.aliconnect.nl/api
+    - url: https://schiphol-qnode.aliconnect.nl/api
     # authorizationUrl: https://login.aliconnect.nl/api/oauth2
     # tokenUrl: https://login.aliconnect.nl/api/oauth2/token
 ref:
   wiki: https://github.com/aliconnect/api/wiki
-  wiki: https://aliconnect.nl/sites/schiphol/wiki
-  home: https://aliconnect.nl/sites/schiphol
+  wiki: https://schiphol-qnode.aliconnect.nl/wiki
+  home: https://schiphol-qnode.aliconnect.nl
 css:
   basebg: '#1B60DB'
   basefg: white
