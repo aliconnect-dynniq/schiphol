@@ -1,5 +1,5 @@
 # SCHIPHOL
-client_id: C52ABA40-11FE-4400-90B9-CEE5BDA2C5AA
+client_id: 3688555-73ff2ed0-1e53-4170-b6da-736532bb1b4f
 info:
   title: Schiphol
   description: .
@@ -17,13 +17,12 @@ scope:
 ws:
   url: wss://aliconnect.nl:444
 client:
-  client_id: C52ABA40-11FE-4400-90B9-CEE5BDA2C5AA
+  client_id: 3688555-73ff2ed0-1e53-4170-b6da-736532bb1b4f
   servers:
-    - url: https://schiphol-qnode.aliconnect.nl/api
+    - url: https://schiphol.aliconnect.nl/api
 ref:
-  wiki: https://github.com/aliconnect/api/wiki
-  wiki: https://schiphol-qnode.aliconnect.nl/wiki
-  home: https://schiphol-qnode.aliconnect.nl
+  wiki: https://schiphol-nl.github.io/wiki
+  home: https://schiphol-nl.github.io
 css:
   basebg: '#1B60DB'
   basefg: white
