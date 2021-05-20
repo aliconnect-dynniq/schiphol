@@ -20,9 +20,6 @@ client:
   client_id: 3688555-73ff2ed0-1e53-4170-b6da-736532bb1b4f
   servers:
     - url: https://schiphol.aliconnect.nl/api
-ref:
-  wiki: https://schiphol-nl.github.io/schiphol-nl.github.io/wiki
-  home: https://schiphol-nl.github.io/schiphol-nl.github.io/wiki
 css:
   basebg: '#1B60DB'
   basefg: white
