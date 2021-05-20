@@ -21,8 +21,8 @@ client:
   servers:
     - url: https://schiphol.aliconnect.nl/api
 ref:
-  wiki: https://schiphol-nl.github.io/wiki
-  home: https://schiphol-nl.github.io
+  wiki: https://schiphol-nl.github.io/schiphol-nl.github.io/wiki
+  home: https://schiphol-nl.github.io/schiphol-nl.github.io/wiki
 css:
   basebg: '#1B60DB'
   basefg: white
