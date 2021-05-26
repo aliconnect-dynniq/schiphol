@@ -1,4 +1,4 @@
-$().config({
+$().setconfig({
   client_id: "3688555-73ff2ed0-1e53-4170-b6da-736532bb1b4f",
   info: {
     title: "Schiphol",
