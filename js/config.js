@@ -1,5 +1,5 @@
 $().setconfig({
-  client_id: "3688555-73ff2ed0-1e53-4170-b6da-736532bb1b4f",
+  client_id: "3664251-c52aba40-11fe-4400-90b9-cee5bda2c5aa",
   info: {
     title: "Schiphol",
     description: ".",
