@@ -1,6 +1,3 @@
-# Schiphol Connect
+# Schiphol-nl README
 
-Welkom op Schiphol Connect
-
-
-`C:\aliconnect\webroot\schiphol`
+Start de applicatie op [schiphol-nl.github.io](//schiphol-nl.github.io/)
