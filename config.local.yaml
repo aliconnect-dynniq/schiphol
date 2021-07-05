@@ -1,7 +1,81 @@
 # SCHIPHOL
 client_id: 3664251-c52aba40-11fe-4400-90b9-cee5bda2c5aa
+contract:
+  documents:
+    - title: Gebruikers voorwaarden
+      url: //aliconnect.nl/wiki/Explore-Legal-Terms-of-use
+    - title: Privacy beleid
+      url: //aliconnect.nl/wiki/Explore-Legal-Privacy-policy
+    - title: Cookie beleid
+      url: //aliconnect.nl/wiki/Explore-Legal-Cookie-policy
+    - title: Copyright beleid
+      url: //aliconnect.nl/wiki/Explore-Legal-Copyright-policy
+  verantwoordelijke:
+    bedrijfsnaam: Schiphol
+    kvk: KVK nummer
+    straat: Straat en nummer
+    postcode: Postcode
+    plaats: Plaats
+    mailadres: Mailadres
+    telefoon: Telefoon
+    contactpersoon:
+      naam: Voorletter(s) en achternaam verwerker
+      functie: Functie
+    Functionaris van de Gegevensverwerking:
+      - naam: Voorletter(s) en achternaam verwerker
+        functie: Functie
+        telefoon: Telefoon
+        mailadres: Mailadres
+    hoofdverantwoordelijke:
+      - naam: Voorletter(s) en achternaam verwerker
+        functie: Functie
+        telefoon: Telefoon
+        mailadres: Mailadres
+      - naam: Voorletter(s) en achternaam verwerker
+        functie: Functie
+        telefoon: Telefoon
+        mailadres: Mailadres
+    Operationeel verantwoordelijke:
+      - naam: Voorletter(s) en achternaam verwerker
+        functie: Functie
+        telefoon: Telefoon
+        mailadres: Mailadres
+      - naam: Voorletter(s) en achternaam verwerker
+        functie: Functie
+        telefoon: Telefoon
+        mailadres: Mailadres
+  verwerker:
+    - bedrijfsnaam: Alicon Projects BV
+      kvk:
+      straat: Geelkerkenkamp 14 A
+      postcode: 6862ER
+      plaats: Oosterbeek
+      max duur melding: 72
+      hoogte boete bij schending geheimhouding: 5000
+      hoogte boete bij schending melden subverwerkers: 500
+      hoogte boete bij schending melding datalek: 2500
+      locatie verwerking persoonsgegevens: Alleen binnen Europa
+    - bedrijfsnaam: Dynniq
+      kvk: KVK nummer
+      straat: Straat en nummer
+      postcode: Postcode
+      plaats: Plaats
+      subverwerkers:
+        - naam: Alicon Projects BV
+          plaats: Oosterbeek
+        - naam: Alicon Systems BV
+          plaats: Oosterbeek
+      max duur melding: 72
+      hoogte boete bij schending geheimhouding: 5000
+      hoogte boete bij schending melden subverwerkers: 500
+      hoogte boete bij schending melding datalek: 2500
+      locatie verwerking persoonsgegevens: Alleen binnen Europa
+      # Alleen binnen Europa | (Ook) buiten europa
 info:
   title: Schiphol
+  street: Amsterdam
+  place: Amsterdam
+  place: Amsterdam
   description: .
   termsOfService: https://schiphol.aliconnect.nl/terms/
   contact:
@@ -19,6 +93,9 @@ ws:
 client:
   servers:
     - url: https://schiphol.aliconnect.nl/api
+ref:
+  home: //github.com/schiphol-nl/schiphol-nl.github.io/wiki/Home
+  home: //schiphol.aliconnect.nl/wiki
 css:
   basebg: '#1B60DB'
   basefg: white
@@ -497,6 +574,15 @@ components:
     Contact:
       allOf:
       - Item
+      security:
+        read:
+        - schiphol:
+          - schiphol.contact.read
+          - schiphol.admin.read
+        write:
+        - schiphol:
+          - schiphol.contact.readwrite
+          - schiphol.admin.readwrite
       apps:
         mobile: []
       printmenu:
@@ -531,15 +617,50 @@ components:
         Fav:
           title: Fav
           type: hidden
+        name:
+          title: name
+        myproperty:
+          title: myproperty
+          security:
+            - schiphol.admin.read
+        email:
+          title: email
         Initials:
           legend: Contactperson
           title: Initials
         GivenName:
           title: GivenName
+          gdpr_type: reguliere persoonsgegevens
+          category: Naam, adres, woonplaats
+          involved: Bezoekers
+          basis: Overeenkomst
+          target: Contact gegevens
+          processor: Internal
+          processor_location: Binnen de EU of in een land met voldoende juridische waarborgen
+          term_days: 0
+          encrypt: false
         FirstName:
           title: FirstName
+          gdpr_type: reguliere persoonsgegevens
+          category: Naam, adres, woonplaats
+          involved: Bezoekers
+          basis: Overeenkomst
+          target: Contact gegevens
+          processor: Internal
+          processor_location: Binnen de EU of in een land met voldoende juridische waarborgen
+          term_days: 0
+          encrypt: false
         MiddleName:
           title: MiddleName
+          gdpr_type: reguliere persoonsgegevens
+          category: Naam, adres, woonplaats
+          involved: Bezoekers
+          basis: Overeenkomst
+          target: Contact gegevens
+          processor: Internal
+          processor_location: Binnen de EU of in een land met voldoende juridische waarborgen
+          term_days: 0
+          encrypt: false
         Surname:
           title: Surname
         Company:
@@ -566,6 +687,15 @@ components:
           legend: Job
           title: JobTitle
           filter: 1
+          gdpr_type: reguliere persoonsgegevens
+          category: Naam, adres, woonplaats
+          involved: Personeel
+          basis: Overeenkomst
+          target: Contact gegevens
+          processor: Internal
+          processor_location: Binnen de EU of in een land met voldoende juridische waarborgen
+          term_days: 0
+          encrypt: false
         StartDateTime:
           title: StartDateTime
           type: date

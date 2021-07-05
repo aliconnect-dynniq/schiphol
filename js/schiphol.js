@@ -1,3 +1,8 @@
+$.extend({
+  test() {
+    console.log(test);
+  }
+})
 $().setconfig({
   components: {
     schemas: {
@@ -7,7 +12,7 @@ $().setconfig({
 $().extend({
   workflowReport1() {
     $().append(
-      
+
     )
   }
 })
